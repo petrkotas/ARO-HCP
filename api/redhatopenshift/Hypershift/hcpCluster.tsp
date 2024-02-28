@@ -33,13 +33,6 @@ interface HcpOpenShiftClusters {
     kubeConfig is ArmResourceActionSync<HcpOpenShiftClusterResource, void, HcpOpenShiftClusterKubeconfig>;
     /** Returns the admin cluster credentials */
     adminCredentials is ArmResourceActionSync<HcpOpenShiftClusterResource, void, HcpOpenShiftClusterCredentials>;
-
-    // ------------------------------
-    // ROSA operations
-    /** Hibernates the cluster */
-    hibernate is ArmResourceActionSync<HcpOpenShiftClusterResource, void, void>;
-    /** Resume the cluster */
-    resume is ArmResourceActionSync<HcpOpenShiftClusterResource, void, void>;
 }
 
 /** Hypershift cluster node pools */

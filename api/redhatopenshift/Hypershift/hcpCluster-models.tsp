@@ -31,8 +31,14 @@ model HcpOpenShiftClusterResource is TrackedResource<HcpOpenShiftClusterProperti
   ...ManagedServiceIdentity;
 }
 
+// The NodePool needs to be TrackedResource for the following reasons:
+// - allow tags to be in place, which allows billing to use tags, important for workers
+// - allow nodepool to be tracked in the portal
+// - deleted when resource group is deleted
+// - allow cascade delete
+// more: https://armwiki.azurewebsites.net/rp_onboarding/tracked_vs_proxy_resources.html
 @parentResource(HcpOpenShiftClusterResource)
-model HcpOpenShiftClusterNodePoolResource is ProxyResource<NodePoolProperties> {
+model HcpOpenShiftClusterNodePoolResource is TrackedResource<NodePoolProperties> {
   /** Name of hypershift cluster */
   @pattern("^[a-zA-Z0-9-]{3,24}$")
   @minLength(3)
@@ -77,8 +83,11 @@ model HcpOpenShiftClusterProperties {
   @visibility("create")
   networkProfile: NetworkProfile;
 
-  /** Worker node pools configuration */
-  @visibility("create", "update")
+  /** Worker node pools configuration, readonly.
+   * The NodePool is always created during day-2 operations.
+   * Using its separate endpoint.
+   */
+  @visibility("read")
   nodePoolProfile: NodePoolProfile[];
 
   /** Enables ETCD encryption, set during creation */

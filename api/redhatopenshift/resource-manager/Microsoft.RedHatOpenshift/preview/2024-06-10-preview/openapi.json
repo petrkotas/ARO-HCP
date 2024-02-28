@@ -474,47 +474,6 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}/hibernate": {
-      "post": {
-        "operationId": "HcpOpenShiftClusters_Hibernate",
-        "tags": [
-          "HcpOpenShiftClusters"
-        ],
-        "description": "Hibernates the cluster",
-        "parameters": [
-          {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/SubscriptionIdParameter"
-          },
-          {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
-          },
-          {
-            "name": "hypershiftClusterName",
-            "in": "path",
-            "description": "Name of hypershift cluster",
-            "required": true,
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 24,
-            "pattern": "^[a-zA-Z0-9-]{3,24}$"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "ARM operation completed successfully."
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
-    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}/kubeConfig": {
       "post": {
         "operationId": "HcpOpenShiftClusters_KubeConfig",
@@ -883,47 +842,6 @@
         },
         "x-ms-long-running-operation": true
       }
-    },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}/resume": {
-      "post": {
-        "operationId": "HcpOpenShiftClusters_Resume",
-        "tags": [
-          "HcpOpenShiftClusters"
-        ],
-        "description": "Resume the cluster",
-        "parameters": [
-          {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/SubscriptionIdParameter"
-          },
-          {
-            "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
-          },
-          {
-            "name": "hypershiftClusterName",
-            "in": "path",
-            "description": "Name of hypershift cluster",
-            "required": true,
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 24,
-            "pattern": "^[a-zA-Z0-9-]{3,24}$"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "ARM operation completed successfully."
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
-            }
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -1109,7 +1027,7 @@
     },
     "HcpOpenShiftClusterNodePoolResource": {
       "type": "object",
-      "description": "Concrete proxy resource types can be created by aliasing this type using a specific property type.",
+      "description": "Concrete tracked resource types can be created by aliasing this type using a specific property type.",
       "properties": {
         "properties": {
           "$ref": "#/definitions/NodePoolProperties",
@@ -1123,7 +1041,7 @@
       },
       "allOf": [
         {
-          "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ProxyResource"
+          "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/TrackedResource"
         }
       ]
     },
@@ -1152,6 +1070,13 @@
       "type": "object",
       "description": "The type used for update operations of the HcpOpenShiftClusterNodePoolResource.",
       "properties": {
+        "tags": {
+          "type": "object",
+          "description": "Resource tags.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
         "properties": {
           "$ref": "#/definitions/HcpOpenShiftClusterNodePoolResourceUpdateProperties",
           "x-ms-client-flatten": true
@@ -1257,15 +1182,12 @@
         },
         "nodePoolProfile": {
           "type": "array",
-          "description": "Worker node pools configuration",
+          "description": "Worker node pools configuration, readonly.\nThe NodePool is always created during day-2 operations.\nUsing its separate endpoint.",
           "items": {
             "$ref": "#/definitions/NodePoolProfile"
           },
-          "x-ms-identifiers": [],
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
+          "readOnly": true,
+          "x-ms-identifiers": []
         },
         "etcdEncryption": {
           "type": "boolean",
@@ -1413,18 +1335,6 @@
           "description": "Configures the cluster ingresses",
           "items": {
             "$ref": "#/definitions/IngressProfile"
-          },
-          "x-ms-identifiers": [],
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "nodePoolProfile": {
-          "type": "array",
-          "description": "Worker node pools configuration",
-          "items": {
-            "$ref": "#/definitions/NodePoolProfile"
           },
           "x-ms-identifiers": [],
           "x-ms-mutability": [
