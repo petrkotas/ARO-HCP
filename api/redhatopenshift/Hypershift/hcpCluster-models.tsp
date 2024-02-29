@@ -23,9 +23,9 @@ model HcpOpenShiftClusterResource is TrackedResource<HcpOpenShiftClusterProperti
   @pattern("^[a-zA-Z0-9-]{3,24}$")
   @minLength(3)
   @maxLength(24)
-  @key("hypershiftClusterName")
+  @key("hcpOpenShiftClusterName") // sets the alternative name for the name propery
   @path
-  @segment("hypershiftClusters")
+  @segment("hcpOpenShiftClusters")
   name: string;
 
   ...ManagedServiceIdentity;
@@ -59,13 +59,11 @@ model HcpOpenShiftClusterProperties {
   @visibility("create", "update")
   clusterProfile: ClusterProfile;
 
-  /** The hypershift control plane profile */
+  /** The cluster identity
+   * TODO: figure out if needed for workload identity
+   */
   @visibility("create", "update")
-  controlPlaneProfile: ControlPlaneProfile;
-
-  /** The cluster service principal profile */
-  @visibility("create", "update")
-  servicePrincipalProfile: ServicePrincipalProfile;
+  identityTbd: string;
 
   /** Configures the cluster API server profile */
   @visibility("create")
@@ -90,9 +88,12 @@ model HcpOpenShiftClusterProperties {
   @visibility("read")
   nodePoolProfile: NodePoolProfile[];
 
-  /** Enables ETCD encryption, set during creation */
+  /** Enables ETCD encryption, set during creation
+   * Allow customer to specify custom encryption keys for etcd
+   * if omitted, the default encryption key is used
+  */
   @visibility("create")
-  etcdEncryption: boolean;
+  etcdEncryption?: EtcdEncryptionProfile;
 
   /** Specifies whether health checks should be enabled for machines in the NodePool. */
   @visibility("create", "update")
@@ -129,32 +130,11 @@ enum ProvisioningState {
 model ClusterProfile {
   /** Version of the control plane components */
   controlPlaneVersion: string;
-}
 
-/** The hypershift control plane profile */
-model ControlPlaneProfile {
-  /** The number of control plane machines */
-  replicas: int32;
-
-  /** The Azure resourceId for the subnet used by the control plane */
+  /** The Azure resourceId for the subnet used by the control plane
+   * TODO: Figure out where to place the subnetId
+  */
   subnetId: string;
-
-  /** The VM size according to the documentation:
-   * - https://learn.microsoft.com/en-us/azure/virtual-machines/sizes */
-  vmSize: string;
-
-  /** The version of the control plane */
-  version: string;
-}
-
-/** The cluster service principal profile */
-model ServicePrincipalProfile {
-  /** The client id of the service principal */
-  clientId: string;
-
-  /** The client secret of the service principal */
-  @secret
-  clientSecret: string;
 }
 
 /** The visibility of the API server */
@@ -213,19 +193,16 @@ model NetworkProfile {
   hostPrefix?: int32 = 23;
 
   /** The core outgoing configuration */
-  outBoundType: OutBoundType;
+  outboundType: OutboundType;
 
   /** Specifies whether subnets are pre-attached with an NSG */
   preconfiguredNsgs: PreconfiguredNsgs;
 }
 
 /** The outbound routing strategy used to provide your cluster egress to the internet. */
-model OutBoundType {
+enum OutboundType {
   /** The loadbalancer configuration */
-  loadBalancer: string;
-
-  /** Custom routing */
-  userDefinedRouting: string;
+  loadBalancer: "loadBalancer",
 }
 
 // TODO: This should be changed to boolean if the strings does not hold names and this struct is used as boolean
@@ -277,6 +254,18 @@ model NodePoolAutoscaling {
 
   /** The maximum number of nodes in the node pool */
   maxReplicas: int32;
+}
+
+/** Etcd encryption profile sets the configuration needed for
+ * customer brought keys to encrypt the etcd.
+ * This is an optional field, if omitted the default encryption key is used.
+ * TODO: decide how this is going to be implemented
+*/
+model EtcdEncryptionProfile {
+  /** The id of the disk encryption set to be used for etcd
+   * Is relies on https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview
+  */
+  discEncryptionSetId: string;
 }
 
 /*

@@ -121,7 +121,7 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/providers/Microsoft.RedHatOpenshift/hypershiftClusters": {
+    "/subscriptions/{subscriptionId}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters": {
       "get": {
         "operationId": "HcpOpenShiftClusters_ListBySubscription",
         "tags": [
@@ -155,7 +155,7 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters": {
       "get": {
         "operationId": "HcpOpenShiftClusters_ListByResourceGroup",
         "tags": [
@@ -192,7 +192,7 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}": {
       "get": {
         "operationId": "HcpOpenShiftClusters_Get",
         "tags": [
@@ -210,7 +210,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -252,7 +252,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -320,7 +320,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -389,7 +389,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -430,7 +430,7 @@
         "x-ms-long-running-operation": true
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}/adminCredentials": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}/adminCredentials": {
       "post": {
         "operationId": "HcpOpenShiftClusters_AdminCredentials",
         "tags": [
@@ -448,7 +448,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -474,7 +474,7 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}/kubeConfig": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}/kubeConfig": {
       "post": {
         "operationId": "HcpOpenShiftClusters_KubeConfig",
         "tags": [
@@ -492,7 +492,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -518,7 +518,7 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}/nodePools": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}/nodePools": {
       "get": {
         "operationId": "NodePools_ListByHcpOpenShiftClusterResource",
         "tags": [
@@ -536,7 +536,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -565,7 +565,7 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hypershiftClusters/{hypershiftClusterName}/nodePools/{nodePoolName}": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}/nodePools/{nodePoolName}": {
       "get": {
         "operationId": "NodePools_Get",
         "tags": [
@@ -583,7 +583,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -635,7 +635,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -713,7 +713,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -792,7 +792,7 @@
             "$ref": "../../../../../common-types/resource-management/v3/types.json#/parameters/ResourceGroupNameParameter"
           },
           {
-            "name": "hypershiftClusterName",
+            "name": "hcpOpenShiftClusterName",
             "in": "path",
             "description": "Name of hypershift cluster",
             "required": true,
@@ -908,10 +908,15 @@
         "controlPlaneVersion": {
           "type": "string",
           "description": "Version of the control plane components"
+        },
+        "subnetId": {
+          "type": "string",
+          "description": "The Azure resourceId for the subnet used by the control plane\nTODO: Figure out where to place the subnetId"
         }
       },
       "required": [
-        "controlPlaneVersion"
+        "controlPlaneVersion",
+        "subnetId"
       ]
     },
     "ClusterProfileUpdate": {
@@ -921,6 +926,10 @@
         "controlPlaneVersion": {
           "type": "string",
           "description": "Version of the control plane components"
+        },
+        "subnetId": {
+          "type": "string",
+          "description": "The Azure resourceId for the subnet used by the control plane\nTODO: Figure out where to place the subnetId"
         }
       }
     },
@@ -937,57 +946,18 @@
         "url"
       ]
     },
-    "ControlPlaneProfile": {
+    "EtcdEncryptionProfile": {
       "type": "object",
-      "description": "The hypershift control plane profile",
+      "description": "Etcd encryption profile sets the configuration needed for\ncustomer brought keys to encrypt the etcd.\nThis is an optional field, if omitted the default encryption key is used.\nTODO: decide how this is going to be implemented",
       "properties": {
-        "replicas": {
-          "type": "integer",
-          "format": "int32",
-          "description": "The number of control plane machines"
-        },
-        "subnetId": {
+        "discEncryptionSetId": {
           "type": "string",
-          "description": "The Azure resourceId for the subnet used by the control plane"
-        },
-        "vmSize": {
-          "type": "string",
-          "description": "The VM size according to the documentation:\n- https://learn.microsoft.com/en-us/azure/virtual-machines/sizes"
-        },
-        "version": {
-          "type": "string",
-          "description": "The version of the control plane"
+          "description": "The id of the disk encryption set to be used for etcd\nIs relies on https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview"
         }
       },
       "required": [
-        "replicas",
-        "subnetId",
-        "vmSize",
-        "version"
+        "discEncryptionSetId"
       ]
-    },
-    "ControlPlaneProfileUpdate": {
-      "type": "object",
-      "description": "The hypershift control plane profile",
-      "properties": {
-        "replicas": {
-          "type": "integer",
-          "format": "int32",
-          "description": "The number of control plane machines"
-        },
-        "subnetId": {
-          "type": "string",
-          "description": "The Azure resourceId for the subnet used by the control plane"
-        },
-        "vmSize": {
-          "type": "string",
-          "description": "The VM size according to the documentation:\n- https://learn.microsoft.com/en-us/azure/virtual-machines/sizes"
-        },
-        "version": {
-          "type": "string",
-          "description": "The version of the control plane"
-        }
-      }
     },
     "HcpOpenShiftClusterCredentials": {
       "type": "object",
@@ -1131,17 +1101,9 @@
             "create"
           ]
         },
-        "controlPlaneProfile": {
-          "$ref": "#/definitions/ControlPlaneProfile",
-          "description": "The hypershift control plane profile",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "servicePrincipalProfile": {
-          "$ref": "#/definitions/ServicePrincipalProfile",
-          "description": "The cluster service principal profile",
+        "identityTbd": {
+          "type": "string",
+          "description": "The cluster identity\nTODO: figure out if needed for workload identity",
           "x-ms-mutability": [
             "update",
             "create"
@@ -1190,8 +1152,8 @@
           "x-ms-identifiers": []
         },
         "etcdEncryption": {
-          "type": "boolean",
-          "description": "Enables ETCD encryption, set during creation",
+          "$ref": "#/definitions/EtcdEncryptionProfile",
+          "description": "Enables ETCD encryption, set during creation\nAllow customer to specify custom encryption keys for etcd\nif omitted, the default encryption key is used",
           "x-ms-mutability": [
             "create"
           ]
@@ -1223,14 +1185,12 @@
       },
       "required": [
         "clusterProfile",
-        "controlPlaneProfile",
-        "servicePrincipalProfile",
+        "identityTbd",
         "apiProfile",
         "consoleProfile",
         "ingressProfiles",
         "networkProfile",
         "nodePoolProfile",
-        "etcdEncryption",
         "autoRepair",
         "labels",
         "oidcIssuerUrl"
@@ -1314,17 +1274,9 @@
             "create"
           ]
         },
-        "controlPlaneProfile": {
-          "$ref": "#/definitions/ControlPlaneProfileUpdate",
-          "description": "The hypershift control plane profile",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "servicePrincipalProfile": {
-          "$ref": "#/definitions/ServicePrincipalProfileUpdate",
-          "description": "The cluster service principal profile",
+        "identityTbd": {
+          "type": "string",
+          "description": "The cluster identity\nTODO: figure out if needed for workload identity",
           "x-ms-mutability": [
             "update",
             "create"
@@ -1468,8 +1420,8 @@
           "description": "Network host prefix which is defaulted to 23 if not specified.",
           "default": 23
         },
-        "outBoundType": {
-          "$ref": "#/definitions/OutBoundType",
+        "outboundType": {
+          "$ref": "#/definitions/OutboundType",
           "description": "The core outgoing configuration"
         },
         "preconfiguredNsgs": {
@@ -1481,7 +1433,7 @@
         "podCidr",
         "serviceCidr",
         "machineCidr",
-        "outBoundType",
+        "outboundType",
         "preconfiguredNsgs"
       ]
     },
@@ -1578,23 +1530,23 @@
         "profile"
       ]
     },
-    "OutBoundType": {
-      "type": "object",
+    "OutboundType": {
+      "type": "string",
       "description": "The outbound routing strategy used to provide your cluster egress to the internet.",
-      "properties": {
-        "loadBalancer": {
-          "type": "string",
-          "description": "The loadbalancer configuration"
-        },
-        "userDefinedRouting": {
-          "type": "string",
-          "description": "Custom routing"
-        }
-      },
-      "required": [
-        "loadBalancer",
-        "userDefinedRouting"
-      ]
+      "enum": [
+        "loadBalancer"
+      ],
+      "x-ms-enum": {
+        "name": "OutboundType",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "loadBalancer",
+            "value": "loadBalancer",
+            "description": "The loadbalancer configuration"
+          }
+        ]
+      }
     },
     "PreconfiguredNsgs": {
       "type": "object",
@@ -1668,42 +1620,6 @@
         ]
       },
       "readOnly": true
-    },
-    "ServicePrincipalProfile": {
-      "type": "object",
-      "description": "The cluster service principal profile",
-      "properties": {
-        "clientId": {
-          "type": "string",
-          "description": "The client id of the service principal"
-        },
-        "clientSecret": {
-          "type": "string",
-          "format": "password",
-          "description": "The client secret of the service principal",
-          "x-ms-secret": true
-        }
-      },
-      "required": [
-        "clientId",
-        "clientSecret"
-      ]
-    },
-    "ServicePrincipalProfileUpdate": {
-      "type": "object",
-      "description": "The cluster service principal profile",
-      "properties": {
-        "clientId": {
-          "type": "string",
-          "description": "The client id of the service principal"
-        },
-        "clientSecret": {
-          "type": "string",
-          "format": "password",
-          "description": "The client secret of the service principal",
-          "x-ms-secret": true
-        }
-      }
     },
     "Versions": {
       "type": "string",
