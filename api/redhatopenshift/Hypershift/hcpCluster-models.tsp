@@ -59,6 +59,10 @@ model HcpOpenShiftClusterProperties {
   @visibility("create", "update")
   clusterProfile: ClusterProfile;
 
+  /** Openshift cluster proxy configuration */
+  @visibility("create", "update")
+  proxyProfile: ProxyProfile;
+
   /** The cluster identity
    * TODO: figure out if needed for workload identity
    */
@@ -74,8 +78,8 @@ model HcpOpenShiftClusterProperties {
   consoleProfile: ConsoleProfile;
 
   /** Configures the cluster ingresses */
-  @visibility("create", "update")
-  ingressProfiles: IngressProfile[];
+  @visibility("create")
+  ingressProfile: IngressProfile;
 
   /** Cluster network configuration */
   @visibility("create")
@@ -95,35 +99,28 @@ model HcpOpenShiftClusterProperties {
   @visibility("create")
   etcdEncryption?: EtcdEncryptionProfile;
 
-  /** Specifies whether health checks should be enabled for machines in the NodePool. */
-  @visibility("create", "update")
-  autoRepair: boolean;
 
-  /** Labels to apply on a created nodes */
-  @visibility("create", "update")
-  labels: string[];
-
-  /** URl for the OIDC provider */
-  @visibility("read")
-  oidcIssuerUrl: string;
 }
 
 /** The resource provisioning state. */
 @lroStatus
 enum ProvisioningState {
   ...ResourceProvisioningState,
+}
 
-  /** The resource is being provisioned. */
-  Provisioning,
+/** OpenShift cluster proxy configuration */
+model ProxyProfile {
+  /** http proxy config */
+  httpProxy: string;
 
-  /** The resource is being updated. */
-  Updating,
+  /** https proxy config */
+  httpsProxy: string;
 
-  /** The resource is being deleted. */
-  Deleting,
+  /** no proxy config */
+  noProxy: string;
 
-  /** The resource provisioning request has been accepted. */
-  Accepted,
+  /** The trusted CA for the proxy */
+  trustedCa: string;
 }
 
 /** High level cluster configuration */
@@ -134,7 +131,16 @@ model ClusterProfile {
   /** The Azure resourceId for the subnet used by the control plane
    * TODO: Figure out where to place the subnetId
   */
+  @visibility("create")
   subnetId: string;
+
+  /** Resource group to put cluster resources */
+  @visibility("create")
+  managedResourceGroup: string;
+
+  /** URl for the OIDC provider */
+  @visibility("read")
+  oidcIssuerUrl: string;
 }
 
 /** The visibility of the API server */
@@ -157,24 +163,32 @@ model ApiProfile {
   ip: string;
 
   /** should the API server be accessible from the internet */
+  @visibility("create")
   visibility: Visibility;
 }
 
 /** Configuration of the cluster web console */
 model ConsoleProfile {
   /** The cluster web console URL endpoint */
+  @visibility("read")
   url: string;
+
+  /** Enable FIPS mode for the cluster */
+  fips: boolean;
 }
 
 /** Configuration of the cluster ingress */
 model IngressProfile {
   /** The IP for the ingress */
+  @visibility("read")
   ip: string;
 
-  /** The ingress name */
-  name: string;
+  /** The ingress url */
+  @visibility("read")
+  url: string;
 
   /** The visibility of the ingress */
+  @visibility("create")
   visibility: Visibility;
 }
 
@@ -187,6 +201,7 @@ model NetworkProfile {
   serviceCidr: string;
 
   /** from which to assign machine IP addresses, for example 10.0.0.0/16 */
+  @visibility("create")
   machineCidr: string;
 
   /** Network host prefix which is defaulted to 23 if not specified. */
@@ -196,7 +211,7 @@ model NetworkProfile {
   outboundType: OutboundType;
 
   /** Specifies whether subnets are pre-attached with an NSG */
-  preconfiguredNsgs: PreconfiguredNsgs;
+  preconfiguredNsgs: boolean;
 }
 
 /** The outbound routing strategy used to provide your cluster egress to the internet. */
@@ -230,14 +245,44 @@ model NodePoolProfile {
   /** The name of the worker pool */
   name: string;
 
+  /** OpenShift version for the nodepool */
+  version: string;
+
+  /** Labels for the nodes */
+  labels: string[];
+
+  /** Taints for the nodes */
+  taints: string[];
+
+  /** The OS disk size in GB */
+  diskSize: int32;
+
+  /** IS the disk ephemeral */
+  ephemeralOsDisk: boolean;
+
   /** The number of worker nodes, it cannot be used together with autoscaling */
   replicas: int32;
 
   /** The Azure resourceId for the subnet used by the workers */
   subnetId: string;
 
-  /** Whether the worker machines should be encrypted at host */
-  encrytptionAtHost: boolean;
+  /** Azure; Whether the worker machines should be encrypted at host */
+  encryptionAtHost: boolean;
+
+  /** Autorepair */
+  autoRepair: boolean;
+
+  /**  */
+  discEncryptionSetId: string;
+
+  /** */
+  tuningConfigs: string[];
+
+  /** The availability zone for the node pool */
+  availabilityZone: string;
+
+  /** The type of the disc storage account */
+  discStorageAccountType: string;
 
   /** The VM size according to the documentation:
    * - https://learn.microsoft.com/en-us/azure/virtual-machines/sizes */

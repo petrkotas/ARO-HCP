@@ -861,7 +861,10 @@
         },
         "visibility": {
           "$ref": "#/definitions/Visibility",
-          "description": "should the API server be accessible from the internet"
+          "description": "should the API server be accessible from the internet",
+          "x-ms-mutability": [
+            "create"
+          ]
         }
       },
       "required": [
@@ -911,12 +914,29 @@
         },
         "subnetId": {
           "type": "string",
-          "description": "The Azure resourceId for the subnet used by the control plane\nTODO: Figure out where to place the subnetId"
+          "description": "The Azure resourceId for the subnet used by the control plane\nTODO: Figure out where to place the subnetId",
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "managedResourceGroup": {
+          "type": "string",
+          "description": "Resource group to put cluster resources",
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "oidcIssuerUrl": {
+          "type": "string",
+          "description": "URl for the OIDC provider",
+          "readOnly": true
         }
       },
       "required": [
         "controlPlaneVersion",
-        "subnetId"
+        "subnetId",
+        "managedResourceGroup",
+        "oidcIssuerUrl"
       ]
     },
     "ClusterProfileUpdate": {
@@ -926,10 +946,6 @@
         "controlPlaneVersion": {
           "type": "string",
           "description": "Version of the control plane components"
-        },
-        "subnetId": {
-          "type": "string",
-          "description": "The Azure resourceId for the subnet used by the control plane\nTODO: Figure out where to place the subnetId"
         }
       }
     },
@@ -939,11 +955,17 @@
       "properties": {
         "url": {
           "type": "string",
-          "description": "The cluster web console URL endpoint"
+          "description": "The cluster web console URL endpoint",
+          "readOnly": true
+        },
+        "fips": {
+          "type": "boolean",
+          "description": "Enable FIPS mode for the cluster"
         }
       },
       "required": [
-        "url"
+        "url",
+        "fips"
       ]
     },
     "EtcdEncryptionProfile": {
@@ -1061,6 +1083,33 @@
           "type": "string",
           "description": "The name of the worker pool"
         },
+        "version": {
+          "type": "string",
+          "description": "OpenShift version for the nodepool"
+        },
+        "labels": {
+          "type": "array",
+          "description": "Labels for the nodes",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taints": {
+          "type": "array",
+          "description": "Taints for the nodes",
+          "items": {
+            "type": "string"
+          }
+        },
+        "diskSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The OS disk size in GB"
+        },
+        "ephemeralOsDisk": {
+          "type": "boolean",
+          "description": "IS the disk ephemeral"
+        },
         "replicas": {
           "type": "integer",
           "format": "int32",
@@ -1070,9 +1119,30 @@
           "type": "string",
           "description": "The Azure resourceId for the subnet used by the workers"
         },
-        "encrytptionAtHost": {
+        "encryptionAtHost": {
           "type": "boolean",
-          "description": "Whether the worker machines should be encrypted at host"
+          "description": "Azure; Whether the worker machines should be encrypted at host"
+        },
+        "autoRepair": {
+          "type": "boolean",
+          "description": "Autorepair"
+        },
+        "discEncryptionSetId": {
+          "type": "string"
+        },
+        "tuningConfigs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availabilityZone": {
+          "type": "string",
+          "description": "The availability zone for the node pool"
+        },
+        "discStorageAccountType": {
+          "type": "string",
+          "description": "The type of the disc storage account"
         },
         "vmSize": {
           "type": "string",
@@ -1101,6 +1171,14 @@
             "create"
           ]
         },
+        "proxyProfile": {
+          "$ref": "#/definitions/ProxyProfile",
+          "description": "Openshift cluster proxy configuration",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
         "identityTbd": {
           "type": "string",
           "description": "The cluster identity\nTODO: figure out if needed for workload identity",
@@ -1123,15 +1201,10 @@
             "create"
           ]
         },
-        "ingressProfiles": {
-          "type": "array",
+        "ingressProfile": {
+          "$ref": "#/definitions/IngressProfile",
           "description": "Configures the cluster ingresses",
-          "items": {
-            "$ref": "#/definitions/IngressProfile"
-          },
-          "x-ms-identifiers": [],
           "x-ms-mutability": [
-            "update",
             "create"
           ]
         },
@@ -1157,43 +1230,17 @@
           "x-ms-mutability": [
             "create"
           ]
-        },
-        "autoRepair": {
-          "type": "boolean",
-          "description": "Specifies whether health checks should be enabled for machines in the NodePool.",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "labels": {
-          "type": "array",
-          "description": "Labels to apply on a created nodes",
-          "items": {
-            "type": "string"
-          },
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "oidcIssuerUrl": {
-          "type": "string",
-          "description": "URl for the OIDC provider",
-          "readOnly": true
         }
       },
       "required": [
         "clusterProfile",
+        "proxyProfile",
         "identityTbd",
         "apiProfile",
         "consoleProfile",
-        "ingressProfiles",
+        "ingressProfile",
         "networkProfile",
-        "nodePoolProfile",
-        "autoRepair",
-        "labels",
-        "oidcIssuerUrl"
+        "nodePoolProfile"
       ]
     },
     "HcpOpenShiftClusterResource": {
@@ -1274,40 +1321,17 @@
             "create"
           ]
         },
+        "proxyProfile": {
+          "$ref": "#/definitions/ProxyProfileUpdate",
+          "description": "Openshift cluster proxy configuration",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
         "identityTbd": {
           "type": "string",
           "description": "The cluster identity\nTODO: figure out if needed for workload identity",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "ingressProfiles": {
-          "type": "array",
-          "description": "Configures the cluster ingresses",
-          "items": {
-            "$ref": "#/definitions/IngressProfile"
-          },
-          "x-ms-identifiers": [],
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "autoRepair": {
-          "type": "boolean",
-          "description": "Specifies whether health checks should be enabled for machines in the NodePool.",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "labels": {
-          "type": "array",
-          "description": "Labels to apply on a created nodes",
-          "items": {
-            "type": "string"
-          },
           "x-ms-mutability": [
             "update",
             "create"
@@ -1381,20 +1405,25 @@
       "properties": {
         "ip": {
           "type": "string",
-          "description": "The IP for the ingress"
+          "description": "The IP for the ingress",
+          "readOnly": true
         },
-        "name": {
+        "url": {
           "type": "string",
-          "description": "The ingress name"
+          "description": "The ingress url",
+          "readOnly": true
         },
         "visibility": {
           "$ref": "#/definitions/Visibility",
-          "description": "The visibility of the ingress"
+          "description": "The visibility of the ingress",
+          "x-ms-mutability": [
+            "create"
+          ]
         }
       },
       "required": [
         "ip",
-        "name",
+        "url",
         "visibility"
       ]
     },
@@ -1412,7 +1441,10 @@
         },
         "machineCidr": {
           "type": "string",
-          "description": "from which to assign machine IP addresses, for example 10.0.0.0/16"
+          "description": "from which to assign machine IP addresses, for example 10.0.0.0/16",
+          "x-ms-mutability": [
+            "create"
+          ]
         },
         "hostPrefix": {
           "type": "integer",
@@ -1425,7 +1457,7 @@
           "description": "The core outgoing configuration"
         },
         "preconfiguredNsgs": {
-          "$ref": "#/definitions/PreconfiguredNsgs",
+          "type": "boolean",
           "description": "Specifies whether subnets are pre-attached with an NSG"
         }
       },
@@ -1481,6 +1513,33 @@
           "type": "string",
           "description": "The name of the worker pool"
         },
+        "version": {
+          "type": "string",
+          "description": "OpenShift version for the nodepool"
+        },
+        "labels": {
+          "type": "array",
+          "description": "Labels for the nodes",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taints": {
+          "type": "array",
+          "description": "Taints for the nodes",
+          "items": {
+            "type": "string"
+          }
+        },
+        "diskSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The OS disk size in GB"
+        },
+        "ephemeralOsDisk": {
+          "type": "boolean",
+          "description": "IS the disk ephemeral"
+        },
         "replicas": {
           "type": "integer",
           "format": "int32",
@@ -1490,9 +1549,30 @@
           "type": "string",
           "description": "The Azure resourceId for the subnet used by the workers"
         },
-        "encrytptionAtHost": {
+        "encryptionAtHost": {
           "type": "boolean",
-          "description": "Whether the worker machines should be encrypted at host"
+          "description": "Azure; Whether the worker machines should be encrypted at host"
+        },
+        "autoRepair": {
+          "type": "boolean",
+          "description": "Autorepair"
+        },
+        "discEncryptionSetId": {
+          "type": "string"
+        },
+        "tuningConfigs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availabilityZone": {
+          "type": "string",
+          "description": "The availability zone for the node pool"
+        },
+        "discStorageAccountType": {
+          "type": "string",
+          "description": "The type of the disc storage account"
         },
         "vmSize": {
           "type": "string",
@@ -1505,9 +1585,19 @@
       },
       "required": [
         "name",
+        "version",
+        "labels",
+        "taints",
+        "diskSize",
+        "ephemeralOsDisk",
         "replicas",
         "subnetId",
-        "encrytptionAtHost",
+        "encryptionAtHost",
+        "autoRepair",
+        "discEncryptionSetId",
+        "tuningConfigs",
+        "availabilityZone",
+        "discStorageAccountType",
         "vmSize",
         "autoscaling"
       ]
@@ -1572,11 +1662,7 @@
       "enum": [
         "Succeeded",
         "Failed",
-        "Canceled",
-        "Provisioning",
-        "Updating",
-        "Deleting",
-        "Accepted"
+        "Canceled"
       ],
       "x-ms-enum": {
         "name": "ProvisioningState",
@@ -1596,30 +1682,60 @@
             "name": "Canceled",
             "value": "Canceled",
             "description": "Resource creation was canceled."
-          },
-          {
-            "name": "Provisioning",
-            "value": "Provisioning",
-            "description": "The resource is being provisioned."
-          },
-          {
-            "name": "Updating",
-            "value": "Updating",
-            "description": "The resource is being updated."
-          },
-          {
-            "name": "Deleting",
-            "value": "Deleting",
-            "description": "The resource is being deleted."
-          },
-          {
-            "name": "Accepted",
-            "value": "Accepted",
-            "description": "The resource provisioning request has been accepted."
           }
         ]
       },
       "readOnly": true
+    },
+    "ProxyProfile": {
+      "type": "object",
+      "description": "OpenShift cluster proxy configuration",
+      "properties": {
+        "httpProxy": {
+          "type": "string",
+          "description": "http proxy config"
+        },
+        "httpsProxy": {
+          "type": "string",
+          "description": "https proxy config"
+        },
+        "noProxy": {
+          "type": "string",
+          "description": "no proxy config"
+        },
+        "trustedCa": {
+          "type": "string",
+          "description": "The trusted CA for the proxy"
+        }
+      },
+      "required": [
+        "httpProxy",
+        "httpsProxy",
+        "noProxy",
+        "trustedCa"
+      ]
+    },
+    "ProxyProfileUpdate": {
+      "type": "object",
+      "description": "OpenShift cluster proxy configuration",
+      "properties": {
+        "httpProxy": {
+          "type": "string",
+          "description": "http proxy config"
+        },
+        "httpsProxy": {
+          "type": "string",
+          "description": "https proxy config"
+        },
+        "noProxy": {
+          "type": "string",
+          "description": "no proxy config"
+        },
+        "trustedCa": {
+          "type": "string",
+          "description": "The trusted CA for the proxy"
+        }
+      }
     },
     "Versions": {
       "type": "string",
