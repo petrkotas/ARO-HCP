@@ -10,16 +10,15 @@ using Azure.ResourceManager;
 
 namespace Microsoft.RedHatOpenshift;
 
-
 /*
 * ===================================
-*   Hypershift cluster core resources
+*   HyperShift cluster core resources
 * ===================================
 */
 
-/** Hypershift cluster resource */
+/** HyperShift cluster resource */
 model HcpOpenShiftClusterResource is TrackedResource<HcpOpenShiftClusterProperties> {
-  /** Name of hypershift cluster */
+  /** Name of HyperShift cluster */
   @pattern("^[a-zA-Z0-9-]{3,24}$")
   @minLength(3)
   @maxLength(24)
@@ -39,7 +38,7 @@ model HcpOpenShiftClusterResource is TrackedResource<HcpOpenShiftClusterProperti
 // more: https://armwiki.azurewebsites.net/rp_onboarding/tracked_vs_proxy_resources.html
 @parentResource(HcpOpenShiftClusterResource)
 model HcpOpenShiftClusterNodePoolResource is TrackedResource<NodePoolProperties> {
-  /** Name of hypershift cluster */
+  /** Name of HyperShift cluster */
   @pattern("^[a-zA-Z0-9-]{3,24}$")
   @minLength(3)
   @maxLength(24)
@@ -49,57 +48,76 @@ model HcpOpenShiftClusterNodePoolResource is TrackedResource<NodePoolProperties>
   name: string;
 }
 
-/** Hypershift cluster properties */
+/** HyperShift cluster properties */
 model HcpOpenShiftClusterProperties {
   /** The status of the last operation. */
   @visibility("read")
   provisioningState?: ProvisioningState;
 
-  /** High level cluster configuration */
   @visibility("create", "update")
-  clusterProfile: ClusterProfile;
+  spec: ClusterSpec;
+}
 
-  /** Openshift cluster proxy configuration */
+model ClusterSpec {
+  /** Version of the control plane components */
   @visibility("create", "update")
-  proxyProfile: ProxyProfile;
+  version: VersionProfile;
 
-  /** The cluster identity
-   * TODO: figure out if needed for workload identity
-   */
-  @visibility("create", "update")
-  identityTbd: string;
-
-  /** Configures the cluster API server profile */
-  @visibility("create")
-  apiProfile: ApiProfile;
-
-  /** Configures the cluster web console */
-  @visibility("create")
-  consoleProfile: ConsoleProfile;
-
-  /** Configures the cluster ingresses */
-  @visibility("create")
-  ingressProfile: IngressProfile;
+  /** Cluster DNS configuration */
+  dns?: DnsProfile;
 
   /** Cluster network configuration */
   @visibility("create")
-  networkProfile: NetworkProfile;
+  network?: NetworkProfile;
+
+  /** Configures the cluster web console */
+  @visibility("read")
+  console: ConsoleProfile;
+
+  /** Configures the cluster API server profile */
+  @visibility("read")
+  api: ApiProfile;
+
+  /** Enable FIPS mode for the cluster */
+  @visibility("create")
+  fips?: boolean = false;
+
+  /** Enables ETCD encryption, set during creation */
+  @visibility("create")
+  etcdEncryption?: boolean = false;
+
+  @visibility("create", "update")
+  disableUserWorkloadMonitoring?: boolean = false;
+
+  /** Openshift cluster proxy configuration */
+  @visibility("create", "update")
+  proxy?: ProxyProfile;
+
+  @visibility("create", "update")
+  additionalTrustBundle?: string;
+
+  /** Azure specific configuration */
+  @visibility("create")
+  platform: PlatformProfile;
+
+  /** URL for the OIDC provider */
+  @visibility("read")
+  issuerUrl: string;
+
+  /* Configuration to override the OpenShift auth server inside cluster */
+  @visibility("create")
+  externalAuth?: ExternalAuthProfile[];
+
+  /** Configures the cluster ingresses */
+  @visibility("create", "update")
+  ingress?: IngressProfile[];
 
   /** Worker node pools configuration, readonly.
    * The NodePool is always created during day-2 operations.
    * Using its separate endpoint.
    */
   @visibility("read")
-  nodePoolProfile: NodePoolProfile[];
-
-  /** Enables ETCD encryption, set during creation
-   * Allow customer to specify custom encryption keys for etcd
-   * if omitted, the default encryption key is used
-  */
-  @visibility("create")
-  etcdEncryption?: EtcdEncryptionProfile;
-
-
+  nodePools: NodePoolProfile[];
 }
 
 /** The resource provisioning state. */
@@ -108,48 +126,67 @@ enum ProvisioningState {
   ...ResourceProvisioningState,
 }
 
-/** OpenShift cluster proxy configuration */
-model ProxyProfile {
-  /** http proxy config */
-  httpProxy: string;
+/** Versions represents an OpenShift version. */
+model VersionProfile {
+  /* ID is the unique identifier of the version. */
+  @visibility("create", "update")
+  id: string;
 
-  /** https proxy config */
-  httpsProxy: string;
-
-  /** no proxy config */
-  noProxy: string;
-
-  /** The trusted CA for the proxy */
-  trustedCa: string;
-}
-
-/** High level cluster configuration */
-model ClusterProfile {
-  /** Version of the control plane components */
-  controlPlaneVersion: string;
-
-  /** The Azure resourceId for the subnet used by the control plane
-   * TODO: Figure out where to place the subnetId
-  */
+  /* ChannelGroup is the name of the set to which this version belongs. Each version belongs to only a single set. */
   @visibility("create")
-  subnetId: string;
+  channelGroup: string;
 
-  /** Resource group to put cluster resources */
-  @visibility("create")
-  managedResourceGroup: string;
-
-  /** URl for the OIDC provider */
+  /* AvailableUpgrades is a list of version names the current version can be upgraded to. */
   @visibility("read")
-  oidcIssuerUrl: string;
+  availableUpgrades: string[];
 }
 
-/** The visibility of the API server */
-enum Visibility {
-/** The API server is visible from the internet. */
-public: "public",
+/** DNS contains the DNS settings of the cluster */
+model DnsProfile {
+  /* BaseDomain is the base DNS domain of the cluster. */
+  @visibility("read")
+  baseDomain: string;
 
-/** The API server is not visible from the internet. */
-private: "private",
+  /* BaseDomainPrefix is the unique name of the cluster representing the OpenShift's cluster name. */
+  /* BaseDomainPrefix is the name that will appear in the cluster's DNS, provisioned cloud providers resources */
+  @visibility("create")
+  baseDomainPrefix: string;
+}
+
+/** Network profile of the cluster */
+model NetworkProfile {
+  /* The main controller responsible for rendering the core networking components */
+  @visibility("create")
+  networkType: NetworkType;
+
+  /** The CIDR of the pod IP addresses, for example 10.128.0.0/14 */
+  @visibility("create")
+  podCidr: string;
+
+  /** The CIDR block for assigned service IPs, for example 172.30.0.0/16 */
+  @visibility("create")
+  serviceCidr: string;
+
+  /** from which to assign machine IP addresses, for example 10.0.0.0/16 */
+  @visibility("create")
+  machineCidr: string;
+
+  /** Network host prefix which is defaulted to 23 if not specified. */
+  @visibility("create")
+  hostPrefix?: int32 = 23;
+}
+
+enum NetworkType {
+  sdn:   "OpenShiftSDN",
+  ovn:   "OVNKubernetes",
+  other: "Other",
+}
+
+/** Configuration of the cluster web console */
+model ConsoleProfile {
+  /** The cluster web console URL endpoint */
+  @visibility("read")
+  url: string;
 }
 
 /** Information about the API of a cluster. */
@@ -167,15 +204,146 @@ model ApiProfile {
   visibility: Visibility;
 }
 
-/** Configuration of the cluster web console */
-model ConsoleProfile {
-  /** The cluster web console URL endpoint */
-  @visibility("read")
-  url: string;
+/** The visibility of the API server */
+enum Visibility {
+  /** The API server is visible from the internet. */
+  public: "public",
 
-  /** Enable FIPS mode for the cluster */
-  fips: boolean;
+  /** The API server is not visible from the internet. */
+  private: "private",
 }
+
+/** OpenShift cluster proxy configuration */
+model ProxyProfile {
+  /** http proxy config */
+  httpProxy: string;
+
+  /** https proxy config */
+  httpsProxy: string;
+
+  /** no proxy config */
+  noProxy: string;
+
+  /** The trusted CA for the proxy */
+  trustedCa: string;
+}
+
+/** Azure specific configuration */
+model PlatformProfile {
+  location: string;
+
+  /** Resource group to put cluster resources */
+  managedResourceGroup: string;
+
+  vnetName: string;
+
+  vnetId: string
+
+  /** ResourceId for the subnet used by the control plane */
+  subnetName: string;
+
+  subscriptionId: string;
+
+  machineIdentityId: string;
+
+  securityGroupName: string;
+
+  /** The core outgoing configuration */
+  outboundType?: OutboundType = loadBalancer;
+
+  /** Specifies whether subnets are pre-attached with an NSG */
+  preconfiguredNsgs: boolean;
+
+  /* Allow customer to specify custom encryption keys for etcd. */
+  etcdEncryption?: EtcdEncryptionProfile;
+}
+
+/** The outbound routing strategy used to provide your cluster egress to the internet. */
+enum OutboundType {
+  /** The loadbalancer configuration */
+  loadBalancer: "loadBalancer",
+}
+
+/** Etcd encryption profile sets the configuration needed for
+ * customer brought keys to encrypt the etcd.
+ * This is an optional field, if omitted the default encryption key is used.
+ * TODO: decide how this is going to be implemented
+*/
+model EtcdEncryptionProfile {
+  /** The id of the disk encryption set to be used for etcd
+   * Is relies on https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview
+  */
+  discEncryptionSetId: string;
+}
+
+/*
+* =======================================
+*   End HyperShift cluster core resources
+* =======================================
+*/
+
+/*
+* =======================================
+*  ExternalAuth resources
+* =======================================
+*/
+
+model ExternalAuthProfile {
+  issuer: TokenIssuerProfile;
+  clients: ExternalAuthClientProfile[];
+  claim: ExternalAuthClaimProfile;
+}
+
+model TokenIssuerProfile {
+  url: string;
+  audiences: string[];
+  ca: string;
+}
+
+model ExternalAuthClientProfile {
+  component: ExternalAuthClientComponentProfile;
+  id: string;
+  secret: string;
+  extraScopes: string[];
+}
+
+model ExternalAuthClientComponentProfile {
+  name: string;
+  namespace: string;
+}
+
+model ExternalAuthClaimProfile {
+  mappings: TokenClaimMappingsProfile;
+  validationRules: TokenClaimValidationRuleProfile[];
+}
+
+model TokenClaimMappingsProfile {
+  username: ClaimProfile;
+  groups: ClaimProfile;
+}
+
+model ClaimProfile {
+  claim: string;
+  prefix: string;
+  prefixPolicy: string;
+}
+
+model TokenClaimValidationRuleProfile {
+  claim: string;
+  requiredValue: string;
+}
+
+/*
+* =======================================
+*  End ExternalAuth resources
+* =======================================
+*/
+
+/*
+* =======================================
+*  Ingress resources
+* =======================================
+*/
 
 /** Configuration of the cluster ingress */
 model IngressProfile {
@@ -192,43 +360,17 @@ model IngressProfile {
   visibility: Visibility;
 }
 
-/** Network profile of the cluster */
-model NetworkProfile {
-  /** The CIDR of the pod IP addresses, for example 10.128.0.0/14 */
-  podCidr: string;
+/*
+* =======================================
+*  End Ingress resources
+* =======================================
+*/
 
-  /** The CIDR block for assigned service IPs, for example 172.30.0.0/16 */
-  serviceCidr: string;
-
-  /** from which to assign machine IP addresses, for example 10.0.0.0/16 */
-  @visibility("create")
-  machineCidr: string;
-
-  /** Network host prefix which is defaulted to 23 if not specified. */
-  hostPrefix?: int32 = 23;
-
-  /** The core outgoing configuration */
-  outboundType: OutboundType;
-
-  /** Specifies whether subnets are pre-attached with an NSG */
-  preconfiguredNsgs: boolean;
-}
-
-/** The outbound routing strategy used to provide your cluster egress to the internet. */
-enum OutboundType {
-  /** The loadbalancer configuration */
-  loadBalancer: "loadBalancer",
-}
-
-// TODO: This should be changed to boolean if the strings does not hold names and this struct is used as boolean
-/** PreconfiguredNSG represents whether customers want to use their own NSG attached to the subnets */
-model PreconfiguredNsgs {
-  /** The name of enabled the NSG */
-  enabled: string;
-
-  /** The name of the disabled NSG */
-  disabled: string;
-}
+/*
+* =======================================
+*  NodePool resources
+* =======================================
+*/
 
 /** Represents the node pool properties */
 model NodePoolProperties {
@@ -301,33 +443,19 @@ model NodePoolAutoscaling {
   maxReplicas: int32;
 }
 
-/** Etcd encryption profile sets the configuration needed for
- * customer brought keys to encrypt the etcd.
- * This is an optional field, if omitted the default encryption key is used.
- * TODO: decide how this is going to be implemented
+/*
+* =======================================
+* End NodePool resources
+* =======================================
 */
-model EtcdEncryptionProfile {
-  /** The id of the disk encryption set to be used for etcd
-   * Is relies on https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview
-  */
-  discEncryptionSetId: string;
-}
 
 /*
 * =======================================
-*   End Hypershift cluster core resources
+*   HyperShift cluster credentials
 * =======================================
 */
 
-
-
-/*
-* =======================================
-*   Hypershift cluster credentials
-* =======================================
-*/
-
-/** Hypershift cluster credentials */
+/** HyperShift cluster credentials */
 model HcpOpenShiftClusterCredentials {
   /** kubeadmin user name */
   kubeadminUsername: string;
@@ -337,7 +465,7 @@ model HcpOpenShiftClusterCredentials {
   kubeadminPassword: string;
 }
 
-/** Hypershift cluster admin kubeconfig */
+/** HyperShift cluster admin kubeconfig */
 model HcpOpenShiftClusterKubeconfig {
   /** The kubeconfig file */
   @visibility("read")
@@ -347,10 +475,6 @@ model HcpOpenShiftClusterKubeconfig {
 
 /*
 * =======================================
-*   End Hypershift cluster credentials
+*   End HyperShift cluster credentials
 * =======================================
 */
-
-
-
-
