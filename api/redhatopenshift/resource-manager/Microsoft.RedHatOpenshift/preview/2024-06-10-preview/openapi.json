@@ -212,7 +212,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -254,7 +254,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -322,7 +322,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -391,7 +391,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -450,7 +450,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -494,7 +494,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -538,7 +538,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -585,7 +585,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -595,7 +595,7 @@
           {
             "name": "nodePoolName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -637,7 +637,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -647,7 +647,7 @@
           {
             "name": "nodePoolName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -715,7 +715,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -725,7 +725,7 @@
           {
             "name": "nodePoolName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -794,7 +794,7 @@
           {
             "name": "hcpOpenShiftClusterName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -804,7 +804,7 @@
           {
             "name": "nodePoolName",
             "in": "path",
-            "description": "Name of hypershift cluster",
+            "description": "Name of HyperShift cluster",
             "required": true,
             "type": "string",
             "minLength": 3,
@@ -904,48 +904,209 @@
       },
       "readOnly": true
     },
-    "ClusterProfile": {
+    "ClaimProfile": {
       "type": "object",
-      "description": "High level cluster configuration",
+      "description": "External auth claim profile",
       "properties": {
-        "controlPlaneVersion": {
+        "claim": {
           "type": "string",
-          "description": "Version of the control plane components"
+          "description": "Claim"
         },
-        "subnetId": {
+        "prefix": {
           "type": "string",
-          "description": "The Azure resourceId for the subnet used by the control plane\nTODO: Figure out where to place the subnetId",
-          "x-ms-mutability": [
-            "create"
-          ]
+          "description": "Prefix"
         },
-        "managedResourceGroup": {
+        "prefixPolicy": {
           "type": "string",
-          "description": "Resource group to put cluster resources",
-          "x-ms-mutability": [
-            "create"
-          ]
-        },
-        "oidcIssuerUrl": {
-          "type": "string",
-          "description": "URl for the OIDC provider",
-          "readOnly": true
+          "description": "Prefix policy"
         }
       },
       "required": [
-        "controlPlaneVersion",
-        "subnetId",
-        "managedResourceGroup",
-        "oidcIssuerUrl"
+        "claim",
+        "prefix",
+        "prefixPolicy"
       ]
     },
-    "ClusterProfileUpdate": {
+    "ClusterSpec": {
       "type": "object",
-      "description": "High level cluster configuration",
+      "description": "The cluster resource specification",
       "properties": {
-        "controlPlaneVersion": {
+        "version": {
+          "$ref": "#/definitions/VersionProfile",
+          "description": "Version of the control plane components",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "dns": {
+          "$ref": "#/definitions/DnsProfile",
+          "description": "Cluster DNS configuration"
+        },
+        "network": {
+          "$ref": "#/definitions/NetworkProfile",
+          "description": "Cluster network configuration",
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "console": {
+          "$ref": "#/definitions/ConsoleProfile",
+          "description": "Configures the cluster web console",
+          "readOnly": true
+        },
+        "api": {
+          "$ref": "#/definitions/ApiProfile",
+          "description": "Configures the cluster API server profile",
+          "readOnly": true
+        },
+        "fips": {
+          "type": "boolean",
+          "description": "Enable FIPS mode for the cluster",
+          "default": false,
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "etcdEncryption": {
+          "type": "boolean",
+          "description": "Enables ETCD encryption, set during creation",
+          "default": false,
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "disableUserWorkloadMonitoring": {
+          "type": "boolean",
+          "description": "Disable user workload monitoring",
+          "default": false,
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "proxy": {
+          "$ref": "#/definitions/ProxyProfile",
+          "description": "Openshift cluster proxy configuration",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "additionalTrustBundle": {
           "type": "string",
-          "description": "Version of the control plane components"
+          "description": "Additional trust bundle for the cluster",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "platform": {
+          "$ref": "#/definitions/PlatformProfile",
+          "description": "Azure specific configuration",
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "issuerUrl": {
+          "type": "string",
+          "description": "URL for the OIDC provider",
+          "readOnly": true
+        },
+        "externalAuth": {
+          "type": "array",
+          "description": "Configuration to override the OpenShift auth server inside cluster",
+          "items": {
+            "$ref": "#/definitions/ExternalAuthProfile"
+          },
+          "x-ms-identifiers": [],
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "ingress": {
+          "type": "array",
+          "description": "Configures the cluster ingresses",
+          "items": {
+            "$ref": "#/definitions/IngressProfile"
+          },
+          "x-ms-identifiers": [],
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "nodePools": {
+          "type": "array",
+          "description": "Worker node pools configuration, readonly.\nThe NodePool is always created during day-2 operations.\nUsing its separate endpoint.",
+          "items": {
+            "$ref": "#/definitions/NodePoolProfile"
+          },
+          "readOnly": true,
+          "x-ms-identifiers": []
+        }
+      },
+      "required": [
+        "version",
+        "console",
+        "api",
+        "platform",
+        "issuerUrl",
+        "nodePools"
+      ]
+    },
+    "ClusterSpecUpdate": {
+      "type": "object",
+      "description": "The cluster resource specification",
+      "properties": {
+        "version": {
+          "$ref": "#/definitions/VersionProfileUpdate",
+          "description": "Version of the control plane components",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "dns": {
+          "$ref": "#/definitions/DnsProfileUpdate",
+          "description": "Cluster DNS configuration"
+        },
+        "disableUserWorkloadMonitoring": {
+          "type": "boolean",
+          "description": "Disable user workload monitoring",
+          "default": false,
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "proxy": {
+          "$ref": "#/definitions/ProxyProfileUpdate",
+          "description": "Openshift cluster proxy configuration",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "additionalTrustBundle": {
+          "type": "string",
+          "description": "Additional trust bundle for the cluster",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "ingress": {
+          "type": "array",
+          "description": "Configures the cluster ingresses",
+          "items": {
+            "$ref": "#/definitions/IngressProfile"
+          },
+          "x-ms-identifiers": [],
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
         }
       }
     },
@@ -957,16 +1118,37 @@
           "type": "string",
           "description": "The cluster web console URL endpoint",
           "readOnly": true
-        },
-        "fips": {
-          "type": "boolean",
-          "description": "Enable FIPS mode for the cluster"
         }
       },
       "required": [
-        "url",
-        "fips"
+        "url"
       ]
+    },
+    "DnsProfile": {
+      "type": "object",
+      "description": "DNS contains the DNS settings of the cluster",
+      "properties": {
+        "baseDomain": {
+          "type": "string",
+          "description": "BaseDomain is the base DNS domain of the cluster.",
+          "readOnly": true
+        },
+        "baseDomainPrefix": {
+          "type": "string",
+          "description": "BaseDomainPrefix is the unique name of the cluster representing the OpenShift's cluster name.\nBaseDomainPrefix is the name that will appear in the cluster's DNS, provisioned cloud providers resources",
+          "x-ms-mutability": [
+            "create"
+          ]
+        }
+      },
+      "required": [
+        "baseDomain",
+        "baseDomainPrefix"
+      ]
+    },
+    "DnsProfileUpdate": {
+      "type": "object",
+      "description": "DNS contains the DNS settings of the cluster"
     },
     "EtcdEncryptionProfile": {
       "type": "object",
@@ -981,9 +1163,108 @@
         "discEncryptionSetId"
       ]
     },
+    "ExternalAuthClaimProfile": {
+      "type": "object",
+      "description": "External auth claim profile",
+      "properties": {
+        "mappings": {
+          "$ref": "#/definitions/TokenClaimMappingsProfile",
+          "description": "The claim mappings"
+        },
+        "validationRules": {
+          "type": "array",
+          "description": "The claim validation rules",
+          "items": {
+            "$ref": "#/definitions/TokenClaimValidationRuleProfile"
+          },
+          "x-ms-identifiers": []
+        }
+      },
+      "required": [
+        "mappings",
+        "validationRules"
+      ]
+    },
+    "ExternalAuthClientComponentProfile": {
+      "type": "object",
+      "description": "External auth component profile",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the external auth client"
+        },
+        "authClientNamespace": {
+          "type": "string",
+          "description": "The namespace of the external auth client"
+        }
+      },
+      "required": [
+        "name",
+        "authClientNamespace"
+      ]
+    },
+    "ExternalAuthClientProfile": {
+      "type": "object",
+      "description": "External auth client profile",
+      "properties": {
+        "component": {
+          "$ref": "#/definitions/ExternalAuthClientComponentProfile",
+          "description": "External auth client component"
+        },
+        "id": {
+          "type": "string",
+          "description": "external auth client id"
+        },
+        "secret": {
+          "type": "string",
+          "format": "password",
+          "description": "external auth client secret",
+          "x-ms-secret": true
+        },
+        "extraScopes": {
+          "type": "array",
+          "description": "external auth client scopes",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "component",
+        "id",
+        "secret",
+        "extraScopes"
+      ]
+    },
+    "ExternalAuthProfile": {
+      "type": "object",
+      "description": "External authentication profile",
+      "properties": {
+        "issuer": {
+          "$ref": "#/definitions/TokenIssuerProfile",
+          "description": "Token Issuer profile"
+        },
+        "clients": {
+          "type": "array",
+          "description": "External auth clients",
+          "items": {
+            "$ref": "#/definitions/ExternalAuthClientProfile"
+          }
+        },
+        "claim": {
+          "$ref": "#/definitions/ExternalAuthClaimProfile",
+          "description": "External auth claim"
+        }
+      },
+      "required": [
+        "issuer",
+        "clients",
+        "claim"
+      ]
+    },
     "HcpOpenShiftClusterCredentials": {
       "type": "object",
-      "description": "Hypershift cluster credentials",
+      "description": "HyperShift cluster credentials",
       "properties": {
         "kubeadminUsername": {
           "type": "string",
@@ -1003,7 +1284,7 @@
     },
     "HcpOpenShiftClusterKubeconfig": {
       "type": "object",
-      "description": "Hypershift cluster admin kubeconfig",
+      "description": "HyperShift cluster admin kubeconfig",
       "properties": {
         "kubeconfig": {
           "type": "string",
@@ -1128,10 +1409,12 @@
           "description": "Autorepair"
         },
         "discEncryptionSetId": {
-          "type": "string"
+          "type": "string",
+          "description": "Disk Encryption Set ID that will be used for ecnryption the Nodes disks\n- https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview\n- https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption"
         },
         "tuningConfigs": {
           "type": "array",
+          "description": "Tuning configs, TODO provide meaningful explanation",
           "items": {
             "type": "string"
           }
@@ -1156,96 +1439,29 @@
     },
     "HcpOpenShiftClusterProperties": {
       "type": "object",
-      "description": "Hypershift cluster properties",
+      "description": "HyperShift cluster properties",
       "properties": {
         "provisioningState": {
           "$ref": "#/definitions/ProvisioningState",
           "description": "The status of the last operation.",
           "readOnly": true
         },
-        "clusterProfile": {
-          "$ref": "#/definitions/ClusterProfile",
-          "description": "High level cluster configuration",
+        "spec": {
+          "$ref": "#/definitions/ClusterSpec",
+          "description": "The cluster resouce specification.",
           "x-ms-mutability": [
             "update",
-            "create"
-          ]
-        },
-        "proxyProfile": {
-          "$ref": "#/definitions/ProxyProfile",
-          "description": "Openshift cluster proxy configuration",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "identityTbd": {
-          "type": "string",
-          "description": "The cluster identity\nTODO: figure out if needed for workload identity",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "apiProfile": {
-          "$ref": "#/definitions/ApiProfile",
-          "description": "Configures the cluster API server profile",
-          "x-ms-mutability": [
-            "create"
-          ]
-        },
-        "consoleProfile": {
-          "$ref": "#/definitions/ConsoleProfile",
-          "description": "Configures the cluster web console",
-          "x-ms-mutability": [
-            "create"
-          ]
-        },
-        "ingressProfile": {
-          "$ref": "#/definitions/IngressProfile",
-          "description": "Configures the cluster ingresses",
-          "x-ms-mutability": [
-            "create"
-          ]
-        },
-        "networkProfile": {
-          "$ref": "#/definitions/NetworkProfile",
-          "description": "Cluster network configuration",
-          "x-ms-mutability": [
-            "create"
-          ]
-        },
-        "nodePoolProfile": {
-          "type": "array",
-          "description": "Worker node pools configuration, readonly.\nThe NodePool is always created during day-2 operations.\nUsing its separate endpoint.",
-          "items": {
-            "$ref": "#/definitions/NodePoolProfile"
-          },
-          "readOnly": true,
-          "x-ms-identifiers": []
-        },
-        "etcdEncryption": {
-          "$ref": "#/definitions/EtcdEncryptionProfile",
-          "description": "Enables ETCD encryption, set during creation\nAllow customer to specify custom encryption keys for etcd\nif omitted, the default encryption key is used",
-          "x-ms-mutability": [
             "create"
           ]
         }
       },
       "required": [
-        "clusterProfile",
-        "proxyProfile",
-        "identityTbd",
-        "apiProfile",
-        "consoleProfile",
-        "ingressProfile",
-        "networkProfile",
-        "nodePoolProfile"
+        "spec"
       ]
     },
     "HcpOpenShiftClusterResource": {
       "type": "object",
-      "description": "Hypershift cluster resource",
+      "description": "HyperShift cluster resource",
       "properties": {
         "properties": {
           "$ref": "#/definitions/HcpOpenShiftClusterProperties",
@@ -1313,25 +1529,9 @@
       "type": "object",
       "description": "The updatable properties of the HcpOpenShiftClusterResource.",
       "properties": {
-        "clusterProfile": {
-          "$ref": "#/definitions/ClusterProfileUpdate",
-          "description": "High level cluster configuration",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "proxyProfile": {
-          "$ref": "#/definitions/ProxyProfileUpdate",
-          "description": "Openshift cluster proxy configuration",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "identityTbd": {
-          "type": "string",
-          "description": "The cluster identity\nTODO: figure out if needed for workload identity",
+        "spec": {
+          "$ref": "#/definitions/ClusterSpecUpdate",
+          "description": "The cluster resouce specification.",
           "x-ms-mutability": [
             "update",
             "create"
@@ -1431,13 +1631,26 @@
       "type": "object",
       "description": "Network profile of the cluster",
       "properties": {
+        "networkType": {
+          "$ref": "#/definitions/NetworkType",
+          "description": "The main controller responsible for rendering the core networking components",
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
         "podCidr": {
           "type": "string",
-          "description": "The CIDR of the pod IP addresses, for example 10.128.0.0/14"
+          "description": "The CIDR of the pod IP addresses, for example 10.128.0.0/14",
+          "x-ms-mutability": [
+            "create"
+          ]
         },
         "serviceCidr": {
           "type": "string",
-          "description": "The CIDR block for assigned service IPs, for example 172.30.0.0/16"
+          "description": "The CIDR block for assigned service IPs, for example 172.30.0.0/16",
+          "x-ms-mutability": [
+            "create"
+          ]
         },
         "machineCidr": {
           "type": "string",
@@ -1450,24 +1663,48 @@
           "type": "integer",
           "format": "int32",
           "description": "Network host prefix which is defaulted to 23 if not specified.",
-          "default": 23
-        },
-        "outboundType": {
-          "$ref": "#/definitions/OutboundType",
-          "description": "The core outgoing configuration"
-        },
-        "preconfiguredNsgs": {
-          "type": "boolean",
-          "description": "Specifies whether subnets are pre-attached with an NSG"
+          "default": 23,
+          "x-ms-mutability": [
+            "create"
+          ]
         }
       },
       "required": [
+        "networkType",
         "podCidr",
         "serviceCidr",
-        "machineCidr",
-        "outboundType",
-        "preconfiguredNsgs"
+        "machineCidr"
       ]
+    },
+    "NetworkType": {
+      "type": "string",
+      "description": "The cluster network type",
+      "enum": [
+        "OpenShiftSDN",
+        "OVNKubernetes",
+        "Other"
+      ],
+      "x-ms-enum": {
+        "name": "NetworkType",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "sdn",
+            "value": "OpenShiftSDN",
+            "description": "The SDN network plugin for the OpenShift cluster\n- https://docs.openshift.com/container-platform/4.12/networking/openshift_sdn/about-openshift-sdn.html"
+          },
+          {
+            "name": "ovn",
+            "value": "OVNKubernetes",
+            "description": "THE OVN network plugin for the OpenShift cluster\n- https://docs.openshift.com/container-platform/4.12/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html"
+          },
+          {
+            "name": "other",
+            "value": "Other",
+            "description": "Other network plugins"
+          }
+        ]
+      }
     },
     "NodePoolAutoscaling": {
       "type": "object",
@@ -1558,10 +1795,12 @@
           "description": "Autorepair"
         },
         "discEncryptionSetId": {
-          "type": "string"
+          "type": "string",
+          "description": "Disk Encryption Set ID that will be used for ecnryption the Nodes disks\n- https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview\n- https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption"
         },
         "tuningConfigs": {
           "type": "array",
+          "description": "Tuning configs, TODO provide meaningful explanation",
           "items": {
             "type": "string"
           }
@@ -1638,22 +1877,66 @@
         ]
       }
     },
-    "PreconfiguredNsgs": {
+    "PlatformProfile": {
       "type": "object",
-      "description": "PreconfiguredNSG represents whether customers want to use their own NSG attached to the subnets",
+      "description": "Azure specific configuration",
       "properties": {
-        "enabled": {
+        "location": {
           "type": "string",
-          "description": "The name of enabled the NSG"
+          "description": "The Azure region for the cluster"
         },
-        "disabled": {
+        "managedResourceGroup": {
           "type": "string",
-          "description": "The name of the disabled NSG"
+          "description": "Resource group to put cluster resources"
+        },
+        "vnetName": {
+          "type": "string",
+          "description": "vNet name that should be used for the cluster"
+        },
+        "vnetId": {
+          "type": "string",
+          "description": "ResourceId for the subnet used by the control plane"
+        },
+        "subnetName": {
+          "type": "string",
+          "description": "ResourceId for the subnet used by the control plane"
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "Subscription ID"
+        },
+        "machineIdentityId": {
+          "type": "string",
+          "description": "The identity id of the machine"
+        },
+        "securityGroupName": {
+          "type": "string",
+          "description": "The identity id of the control plane"
+        },
+        "outboundType": {
+          "$ref": "#/definitions/OutboundType",
+          "description": "The core outgoing configuration",
+          "default": "loadBalancer"
+        },
+        "preconfiguredNsgs": {
+          "type": "boolean",
+          "description": "Specifies whether subnets are pre-attached with an NSG"
+        },
+        "etcdEncryption": {
+          "$ref": "#/definitions/EtcdEncryptionProfile",
+          "description": "Allow customer to specify custom encryption keys for etcd."
         }
       },
       "required": [
-        "enabled",
-        "disabled"
+        "location",
+        "managedResourceGroup",
+        "vnetName",
+        "vnetId",
+        "subnetName",
+        "subscriptionId",
+        "machineIdentityId",
+        "securityGroupName",
+        "preconfiguredNsgs"
       ]
     },
     "ProvisioningState": {
@@ -1734,6 +2017,116 @@
         "trustedCa": {
           "type": "string",
           "description": "The trusted CA for the proxy"
+        }
+      }
+    },
+    "TokenClaimMappingsProfile": {
+      "type": "object",
+      "description": "External auth claim mappings profile",
+      "properties": {
+        "username": {
+          "$ref": "#/definitions/ClaimProfile",
+          "description": "The claim mappings username"
+        },
+        "groups": {
+          "$ref": "#/definitions/ClaimProfile",
+          "description": "The claim mappings groups"
+        }
+      },
+      "required": [
+        "username",
+        "groups"
+      ]
+    },
+    "TokenClaimValidationRuleProfile": {
+      "type": "object",
+      "description": "External auth claim validation rule",
+      "properties": {
+        "claim": {
+          "type": "string",
+          "description": "Claim"
+        },
+        "requiredValue": {
+          "type": "string",
+          "description": "Required value"
+        }
+      },
+      "required": [
+        "claim",
+        "requiredValue"
+      ]
+    },
+    "TokenIssuerProfile": {
+      "type": "object",
+      "description": "Token issuer profile",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "The URL of the token issuer"
+        },
+        "audiences": {
+          "type": "array",
+          "description": "The audience of the token issuer",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ca": {
+          "type": "string",
+          "description": "The issuer of the token"
+        }
+      },
+      "required": [
+        "url",
+        "audiences",
+        "ca"
+      ]
+    },
+    "VersionProfile": {
+      "type": "object",
+      "description": "Versions represents an OpenShift version.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID is the unique identifier of the version.",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
+        },
+        "channelGroup": {
+          "type": "string",
+          "description": "ChannelGroup is the name of the set to which this version belongs. Each version belongs to only a single set.",
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "availableUpgrades": {
+          "type": "array",
+          "description": "AvailableUpgrades is a list of version names the current version can be upgraded to.",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "channelGroup",
+        "availableUpgrades"
+      ]
+    },
+    "VersionProfileUpdate": {
+      "type": "object",
+      "description": "Versions represents an OpenShift version.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID is the unique identifier of the version.",
+          "x-ms-mutability": [
+            "update",
+            "create"
+          ]
         }
       }
     },

@@ -54,10 +54,12 @@ model HcpOpenShiftClusterProperties {
   @visibility("read")
   provisioningState?: ProvisioningState;
 
+  /** The cluster resouce specification. */
   @visibility("create", "update")
   spec: ClusterSpec;
 }
 
+/** The cluster resource specification */
 model ClusterSpec {
   /** Version of the control plane components */
   @visibility("create", "update")
@@ -86,6 +88,7 @@ model ClusterSpec {
   @visibility("create")
   etcdEncryption?: boolean = false;
 
+  /** Disable user workload monitoring */
   @visibility("create", "update")
   disableUserWorkloadMonitoring?: boolean = false;
 
@@ -93,6 +96,7 @@ model ClusterSpec {
   @visibility("create", "update")
   proxy?: ProxyProfile;
 
+  /** Additional trust bundle for the cluster */
   @visibility("create", "update")
   additionalTrustBundle?: string;
 
@@ -104,7 +108,7 @@ model ClusterSpec {
   @visibility("read")
   issuerUrl: string;
 
-  /* Configuration to override the OpenShift auth server inside cluster */
+  /** Configuration to override the OpenShift auth server inside cluster */
   @visibility("create")
   externalAuth?: ExternalAuthProfile[];
 
@@ -128,34 +132,35 @@ enum ProvisioningState {
 
 /** Versions represents an OpenShift version. */
 model VersionProfile {
-  /* ID is the unique identifier of the version. */
+  /** ID is the unique identifier of the version. */
   @visibility("create", "update")
   id: string;
 
-  /* ChannelGroup is the name of the set to which this version belongs. Each version belongs to only a single set. */
+  /** ChannelGroup is the name of the set to which this version belongs. Each version belongs to only a single set. */
   @visibility("create")
   channelGroup: string;
 
-  /* AvailableUpgrades is a list of version names the current version can be upgraded to. */
+  /** AvailableUpgrades is a list of version names the current version can be upgraded to. */
   @visibility("read")
   availableUpgrades: string[];
 }
 
 /** DNS contains the DNS settings of the cluster */
 model DnsProfile {
-  /* BaseDomain is the base DNS domain of the cluster. */
+  /** BaseDomain is the base DNS domain of the cluster. */
   @visibility("read")
   baseDomain: string;
 
-  /* BaseDomainPrefix is the unique name of the cluster representing the OpenShift's cluster name. */
-  /* BaseDomainPrefix is the name that will appear in the cluster's DNS, provisioned cloud providers resources */
+  /**  BaseDomainPrefix is the unique name of the cluster representing the OpenShift's cluster name.
+  * BaseDomainPrefix is the name that will appear in the cluster's DNS, provisioned cloud providers resources
+  * */
   @visibility("create")
   baseDomainPrefix: string;
 }
 
 /** Network profile of the cluster */
 model NetworkProfile {
-  /* The main controller responsible for rendering the core networking components */
+  /** The main controller responsible for rendering the core networking components */
   @visibility("create")
   networkType: NetworkType;
 
@@ -176,9 +181,17 @@ model NetworkProfile {
   hostPrefix?: int32 = 23;
 }
 
+/** The cluster network type */
 enum NetworkType {
+  /** The SDN network plugin for the OpenShift cluster
+   * - https://docs.openshift.com/container-platform/4.12/networking/openshift_sdn/about-openshift-sdn.html
+  */
   sdn:   "OpenShiftSDN",
+  /** THE OVN network plugin for the OpenShift cluster
+   * - https://docs.openshift.com/container-platform/4.12/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html
+   */
   ovn:   "OVNKubernetes",
+  /** Other network plugins */
   other: "Other",
 }
 
@@ -230,31 +243,37 @@ model ProxyProfile {
 
 /** Azure specific configuration */
 model PlatformProfile {
+  /** The Azure region for the cluster */
   location: string;
 
   /** Resource group to put cluster resources */
   managedResourceGroup: string;
 
+  /** vNet name that should be used for the cluster */
   vnetName: string;
 
-  vnetId: string
+  /** ResourceId for the subnet used by the control plane */
+  vnetId: string;
 
   /** ResourceId for the subnet used by the control plane */
   subnetName: string;
 
+  /** Subscription ID */
   subscriptionId: string;
 
+  /** The identity id of the machine */
   machineIdentityId: string;
 
+  /** The identity id of the control plane */
   securityGroupName: string;
 
   /** The core outgoing configuration */
-  outboundType?: OutboundType = loadBalancer;
+  outboundType?: OutboundType = OutboundType.loadBalancer;
 
   /** Specifies whether subnets are pre-attached with an NSG */
   preconfiguredNsgs: boolean;
 
-  /* Allow customer to specify custom encryption keys for etcd. */
+  /** Allow customer to specify custom encryption keys for etcd. */
   etcdEncryption?: EtcdEncryptionProfile;
 }
 
@@ -288,48 +307,82 @@ model EtcdEncryptionProfile {
 * =======================================
 */
 
+/** External authentication profile */
 model ExternalAuthProfile {
+  /** Token Issuer profile */
   issuer: TokenIssuerProfile;
+  /** External auth clients */
   clients: ExternalAuthClientProfile[];
+  /** External auth claim */
   claim: ExternalAuthClaimProfile;
 }
 
+/** Token issuer profile */
 model TokenIssuerProfile {
+  /** The URL of the token issuer */
   url: string;
+  /** The audience of the token issuer */
   audiences: string[];
+  /** The issuer of the token */
   ca: string;
 }
 
+/** External auth client profile */
 model ExternalAuthClientProfile {
+  /** External auth client component */
   component: ExternalAuthClientComponentProfile;
+
+  /** external auth client id */
   id: string;
+
+  /** external auth client secret */
+  @secret
   secret: string;
+
+  /** external auth client scopes */
   extraScopes: string[];
 }
 
+/** External auth component profile */
 model ExternalAuthClientComponentProfile {
+  /** The name of the external auth client */
   name: string;
-  namespace: string;
+  /** The namespace of the external auth client */
+  authClientNamespace: string;
 }
 
+/** External auth claim profile */
 model ExternalAuthClaimProfile {
+  /** The claim mappings */
   mappings: TokenClaimMappingsProfile;
+
+  /** The claim validation rules */
   validationRules: TokenClaimValidationRuleProfile[];
 }
 
+/** External auth claim mappings profile */
 model TokenClaimMappingsProfile {
+  /** The claim mappings username*/
   username: ClaimProfile;
+  /** The claim mappings groups */
   groups: ClaimProfile;
 }
 
+/** External auth claim profile */
 model ClaimProfile {
+  /** Claim */
   claim: string;
+  /** Prefix */
   prefix: string;
+  /** Prefix policy */
   prefixPolicy: string;
 }
 
+/** External auth claim validation rule */
 model TokenClaimValidationRuleProfile {
+  /** Claim */
   claim: string;
+  /** Required value */
   requiredValue: string;
 }
 
@@ -414,10 +467,13 @@ model NodePoolProfile {
   /** Autorepair */
   autoRepair: boolean;
 
-  /**  */
+  /** Disk Encryption Set ID that will be used for ecnryption the Nodes disks
+   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview
+   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption
+   */
   discEncryptionSetId: string;
 
-  /** */
+  /** Tuning configs, TODO provide meaningful explanation */
   tuningConfigs: string[];
 
   /** The availability zone for the node pool */
