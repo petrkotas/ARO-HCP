@@ -96,10 +96,6 @@ model ClusterSpec {
   @visibility("create", "update")
   proxy?: ProxyProfile;
 
-  /** Additional trust bundle for the cluster */
-  @visibility("create", "update")
-  additionalTrustBundle?: string;
-
   /** Azure specific configuration */
   @visibility("create")
   platform: PlatformProfile;
@@ -108,9 +104,9 @@ model ClusterSpec {
   @visibility("read")
   issuerUrl: string;
 
-  /** Configuration to override the OpenShift auth server inside cluster */
+  /** Configuration to override the openshift-oauth-apiserver inside cluster */
   @visibility("create")
-  externalAuth?: ExternalAuthProfile[];
+  externalAuth?: ExternalAuthConfigProfile;
 
   /** Configures the cluster ingresses */
   @visibility("create", "update")
@@ -162,7 +158,7 @@ model DnsProfile {
 model NetworkProfile {
   /** The main controller responsible for rendering the core networking components */
   @visibility("create")
-  networkType: NetworkType;
+  networkType?: NetworkType = OVNKubernetes;
 
   /** The CIDR of the pod IP addresses, for example 10.128.0.0/14 */
   @visibility("create")
@@ -186,13 +182,13 @@ enum NetworkType {
   /** The SDN network plugin for the OpenShift cluster
    * - https://docs.openshift.com/container-platform/4.12/networking/openshift_sdn/about-openshift-sdn.html
   */
-  sdn:   "OpenShiftSDN",
+  OpenShiftSDN:  "OpenShiftSDN",
   /** THE OVN network plugin for the OpenShift cluster
    * - https://docs.openshift.com/container-platform/4.12/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html
    */
-  ovn:   "OVNKubernetes",
+  OVNKubernetes: "OVNKubernetes",
   /** Other network plugins */
-  other: "Other",
+  Other:         "Other",
 }
 
 /** Configuration of the cluster web console */
@@ -229,43 +225,25 @@ enum Visibility {
 /** OpenShift cluster proxy configuration */
 model ProxyProfile {
   /** http proxy config */
-  httpProxy: string;
+  httpProxy?: string;
 
   /** https proxy config */
-  httpsProxy: string;
+  httpsProxy?: string;
 
   /** no proxy config */
-  noProxy: string;
+  noProxy?: string;
 
   /** The trusted CA for the proxy */
-  trustedCa: string;
+  trustedCa?: string;
 }
 
 /** Azure specific configuration */
 model PlatformProfile {
-  /** The Azure region for the cluster */
-  location: string;
-
   /** Resource group to put cluster resources */
   managedResourceGroup: string;
 
-  /** vNet name that should be used for the cluster */
-  vnetName: string;
-
-  /** ResourceId for the subnet used by the control plane */
-  vnetId: string;
-
   /** ResourceId for the subnet used by the control plane */
   subnetName: string;
-
-  /** Subscription ID */
-  subscriptionId: string;
-
-  /** The identity id of the machine */
-  machineIdentityId: string;
-
-  /** The identity id of the control plane */
-  securityGroupName: string;
 
   /** The core outgoing configuration */
   outboundType?: OutboundType = OutboundType.loadBalancer;
@@ -306,6 +284,17 @@ model EtcdEncryptionProfile {
 *  ExternalAuth resources
 * =======================================
 */
+
+/** External authentication configuration profile */
+model ExternalAuthConfigProfile {
+  /** This can be set during cluster creation only to ensure there is no openshift-oauth-apiserver in cluster */
+  @visibility("create")
+  enabled?: boolean = false;
+
+  /** This can only be set as a day-2 resource on a separate endpoint to provide a self-managed auth service */
+  @visibility("read")
+  externalAuths: ExternalAuthProfile[];
+}
 
 /** External authentication profile */
 model ExternalAuthProfile {
