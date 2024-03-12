@@ -67,3 +67,14 @@ tsp compile .
 
 Or you can use the submited build task, that does exactly the same. The default shortcut is `Ctrl+Shift+B` or `Cmd+Shift+B`.
 
+## Swagger example generation
+
+The devcontainer comes with bundled [Azure/oav](https://github.com/Azure/oav) which lets you both
+validate the swagger and generate the example requests and responses.
+
+To generate the example requests and responses, you can use the following command:
+
+```bash
+oav generate-examples <path-to-spec>
+```
+

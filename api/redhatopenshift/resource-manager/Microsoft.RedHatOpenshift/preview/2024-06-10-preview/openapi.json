@@ -81,6 +81,14 @@
         },
         "x-ms-pageable": {
           "nextLinkName": "nextLink"
+        },
+        "x-ms-examples": {
+          "Operations_List_MaximumSet_Gen": {
+            "$ref": "./examples/Operations_List_MaximumSet_Gen.json"
+          },
+          "Operations_List_MinimumSet_Gen": {
+            "$ref": "./examples/Operations_List_MinimumSet_Gen.json"
+          }
         }
       }
     },
@@ -118,6 +126,14 @@
         },
         "x-ms-pageable": {
           "nextLinkName": "nextLink"
+        },
+        "x-ms-examples": {
+          "HypershiftClusterVersionOperations_ListByLocation_MaximumSet_Gen": {
+            "$ref": "./examples/HypershiftClusterVersionOperations_ListByLocation_MaximumSet_Gen.json"
+          },
+          "HypershiftClusterVersionOperations_ListByLocation_MinimumSet_Gen": {
+            "$ref": "./examples/HypershiftClusterVersionOperations_ListByLocation_MinimumSet_Gen.json"
+          }
         }
       }
     },
@@ -152,6 +168,11 @@
         },
         "x-ms-pageable": {
           "nextLinkName": "nextLink"
+        },
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_ListBySubscription_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_ListBySubscription_MaximumSet_Gen.json"
+          }
         }
       }
     },
@@ -189,6 +210,11 @@
         },
         "x-ms-pageable": {
           "nextLinkName": "nextLink"
+        },
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_ListByResourceGroup_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_ListByResourceGroup_MaximumSet_Gen.json"
+          }
         }
       }
     },
@@ -232,6 +258,11 @@
             "schema": {
               "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
             }
+          }
+        },
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_Get_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_Get_MaximumSet_Gen.json"
           }
         }
       },
@@ -301,7 +332,12 @@
         "x-ms-long-running-operation-options": {
           "final-state-via": "azure-async-operation"
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_CreateOrUpdate_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_CreateOrUpdate_MaximumSet_Gen.json"
+          }
+        }
       },
       "patch": {
         "operationId": "HcpOpenShiftClusters_Update",
@@ -370,7 +406,12 @@
         "x-ms-long-running-operation-options": {
           "final-state-via": "location"
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_Update_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_Update_MaximumSet_Gen.json"
+          }
+        }
       },
       "delete": {
         "operationId": "HcpOpenShiftClusters_Delete",
@@ -427,7 +468,12 @@
         "x-ms-long-running-operation-options": {
           "final-state-via": "location"
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_Delete_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_Delete_MaximumSet_Gen.json"
+          }
+        }
       }
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenshift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}/adminCredentials": {
@@ -470,6 +516,11 @@
             "schema": {
               "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
             }
+          }
+        },
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_AdminCredentials_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_AdminCredentials_MaximumSet_Gen.json"
           }
         }
       }
@@ -514,6 +565,11 @@
             "schema": {
               "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
             }
+          }
+        },
+        "x-ms-examples": {
+          "HcpOpenShiftClusters_KubeConfig_MaximumSet_Gen": {
+            "$ref": "./examples/HcpOpenShiftClusters_KubeConfig_MaximumSet_Gen.json"
           }
         }
       }
@@ -562,6 +618,11 @@
         },
         "x-ms-pageable": {
           "nextLinkName": "nextLink"
+        },
+        "x-ms-examples": {
+          "NodePools_ListByHcpOpenShiftClusterResource_MaximumSet_Gen": {
+            "$ref": "./examples/NodePools_ListByHcpOpenShiftClusterResource_MaximumSet_Gen.json"
+          }
         }
       }
     },
@@ -615,6 +676,11 @@
             "schema": {
               "$ref": "../../../../../common-types/resource-management/v3/types.json#/definitions/ErrorResponse"
             }
+          }
+        },
+        "x-ms-examples": {
+          "NodePools_Get_MaximumSet_Gen": {
+            "$ref": "./examples/NodePools_Get_MaximumSet_Gen.json"
           }
         }
       },
@@ -694,7 +760,12 @@
         "x-ms-long-running-operation-options": {
           "final-state-via": "azure-async-operation"
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "NodePools_CreateOrUpdate_MaximumSet_Gen": {
+            "$ref": "./examples/NodePools_CreateOrUpdate_MaximumSet_Gen.json"
+          }
+        }
       },
       "patch": {
         "operationId": "NodePools_Update",
@@ -773,7 +844,12 @@
         "x-ms-long-running-operation-options": {
           "final-state-via": "location"
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "NodePools_Update_MaximumSet_Gen": {
+            "$ref": "./examples/NodePools_Update_MaximumSet_Gen.json"
+          }
+        }
       },
       "delete": {
         "operationId": "NodePools_Delete",
@@ -840,7 +916,12 @@
         "x-ms-long-running-operation-options": {
           "final-state-via": "location"
         },
-        "x-ms-long-running-operation": true
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "NodePools_Delete_MaximumSet_Gen": {
+            "$ref": "./examples/NodePools_Delete_MaximumSet_Gen.json"
+          }
+        }
       }
     }
   },

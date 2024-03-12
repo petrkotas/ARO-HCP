@@ -1,0 +1,18 @@
+{
+  "title": "HypershiftClusterVersionOperations_ListByLocation",
+  "operationId": "HypershiftClusterVersionOperations_ListByLocation",
+  "parameters": {
+    "api-version": "2024-06-10-preview",
+    "subscriptionId": "FC45271E-9AD1-471C-B97C-DA2F369AB7CE",
+    "location": "destrwvtogygcvjlspqnwmu"
+  },
+  "responses": {
+    "200": {
+      "body": {
+        "value": [
+          {}
+        ]
+      }
+    }
+  }
+}
