@@ -3,7 +3,7 @@
   "operationId": "NodePools_Get",
   "parameters": {
     "api-version": "2024-06-10-preview",
-    "subscriptionId": "A0452127-E2C5-474B-9FB5-FA809B1022DC",
+    "subscriptionId": "6A48405D-2CBE-4C80-AFB4-266406E6E023",
     "resourceGroupName": "rgopenapi",
     "hcpOpenShiftClusterName": "Replace this value with a string matching RegExp ^[a-zA-Z0-9-]{3,24}$",
     "nodePoolName": "Replace this value with a string matching RegExp ^[a-zA-Z0-9-]{3,24}$"
@@ -14,47 +14,47 @@
         "properties": {
           "provisioningState": "Succeeded",
           "profile": {
-            "name": "jbmgyzbxseqpeanrxjftryzqqnpzay",
-            "version": "eqqc",
+            "name": "ulckawpkyxzqpjkgoah",
+            "version": "uoqanvczifnvtekkpvxjzxzbjrpf",
             "labels": [
-              "qgqhcmxbhkpffkytbnvd"
+              "iitpyqjxcggudnzhltppfzhsichv"
             ],
             "taints": [
-              "yseunftinjkpe"
+              "hiesvhcunqneurpsoxoyysrv"
             ],
-            "diskSize": 29,
+            "diskSize": 25,
             "ephemeralOsDisk": true,
-            "replicas": 29,
-            "subnetId": "sslpavxmjnklzdoabpoj",
+            "replicas": 16,
+            "subnetId": "pwzpxvibeppgjgwnvd",
             "encryptionAtHost": true,
             "autoRepair": true,
-            "discEncryptionSetId": "cr",
+            "discEncryptionSetId": "mzcmgdpbukbnkachgdonhex",
             "tuningConfigs": [
-              "pnbyeueebnkix"
+              "vxjiigbnuljjxgtwdglidmu"
             ],
-            "availabilityZone": "ks",
-            "diskStorageAccountType": "xi",
-            "vmSize": "ffrbon",
+            "availabilityZone": "v",
+            "diskStorageAccountType": "xzypqmqdctymphwhthpxygewyw",
+            "vmSize": "ssgyuguvx",
             "autoscaling": {
-              "minReplicas": 10,
-              "maxReplicas": 27
+              "minReplicas": 30,
+              "maxReplicas": 11
             }
           }
         },
         "tags": {
-          "key6983": "kgapqmvu"
+          "key2248": "apehmaxs"
         },
-        "location": "x",
-        "id": "zapexaa",
-        "name": "pxnmhf",
-        "type": "ofhpethwwczetmrylyxycxijqy",
+        "location": "xy",
+        "id": "ymrqzzskdtov",
+        "name": "eladswawkjktetfgamyimgqyrm",
+        "type": "jskeneohrcucgqrffiebifqtlf",
         "systemData": {
-          "createdBy": "xhpexhblvbxohmgl",
+          "createdBy": "cdwcvknu",
           "createdByType": "User",
-          "createdAt": "2024-03-13T07:43:50.074Z",
-          "lastModifiedBy": "ejxjgkqrwrxnootn",
+          "createdAt": "2024-03-13T17:11:19.485Z",
+          "lastModifiedBy": "iwxqzej",
           "lastModifiedByType": "User",
-          "lastModifiedAt": "2024-03-13T07:43:50.075Z"
+          "lastModifiedAt": "2024-03-13T17:11:19.485Z"
         }
       }
     }

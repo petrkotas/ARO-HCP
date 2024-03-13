@@ -104,24 +104,21 @@ model ClusterSpec {
   @visibility("create")
   platform: PlatformProfile;
 
-  /** URL for the OIDC provider */
+  /** URL for the OIDC provider to be used for authentication
+   * to authenticate against user Azure cloud account
+   */
   @visibility("read")
   issuerUrl: string;
 
-  /** Configuration to override the openshift-oauth-apiserver inside cluster */
+  /** Configuration to override the openshift-oauth-apiserver inside cluster
+   *  This changes user login into the cluster to external provider
+  */
   @visibility("create")
   externalAuth?: ExternalAuthConfigProfile;
 
   /** Configures the cluster ingresses */
-  @visibility("create", "update")
+  @visibility("create")
   ingress?: IngressProfile[];
-
-  /** Worker node pools configuration, readonly.
-   * The NodePool is always created during day-2 operations.
-   * Using its separate endpoint.
-   */
-  @visibility("read")
-  nodePools: NodePoolProfile[];
 }
 
 /** The resource provisioning state. */
@@ -255,7 +252,7 @@ model PlatformProfile {
   managedResourceGroup: string;
 
   /** ResourceId for the subnet used by the control plane */
-  subnetName: string;
+  subnetId: string;
 
   /** The core outgoing configuration */
   outboundType?: OutboundType = OutboundType.loadBalancer;
@@ -479,7 +476,18 @@ model NodePoolProfile {
    */
   discEncryptionSetId: string;
 
-  /** Tuning configs, TODO provide meaningful explanation */
+  /** Tuning configs, TODO provide meaningful explanation
+   * TuningConfig is a list of references to ConfigMaps containing serialized
+	 * Tuned resources to define the tuning configuration to be applied to
+	 * nodes in the NodePool. The Tuned API is defined here:
+   * - https://github.com/openshift/cluster-node-tuning-operator/blob/2c76314fb3cc8f12aef4a0dcd67ddc3677d5b54f/pkg/apis/tuned/v1/tuned_types.go
+   *
+   * The PerformanceProfile API is defined here:
+   * - https://github.com/openshift/cluster-node-tuning-operator/tree/b41042d42d4ba5bb2e99960248cf1d6ae4935018/pkg/apis/performanceprofile/v2
+   *
+   * Each ConfigMap must have a single key named "tuned" whose value is the
+   * JSON or YAML of a serialized Tuned or PerformanceProfile.
+  */
   tuningConfigs: string[];
 
   /** The availability zone for the node pool.
@@ -525,9 +533,11 @@ model NodePoolAutoscaling {
 /** HyperShift cluster credentials */
 model HcpOpenShiftClusterCredentials {
   /** kubeadmin user name */
+  @visibility("read")
   kubeadminUsername: string;
 
   /** kube admin password */
+  @visibility("read")
   @secret
   kubeadminPassword: string;
 }

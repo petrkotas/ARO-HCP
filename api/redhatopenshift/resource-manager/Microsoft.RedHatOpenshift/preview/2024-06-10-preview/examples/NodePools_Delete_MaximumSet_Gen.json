@@ -3,7 +3,7 @@
   "operationId": "NodePools_Delete",
   "parameters": {
     "api-version": "2024-06-10-preview",
-    "subscriptionId": "A0452127-E2C5-474B-9FB5-FA809B1022DC",
+    "subscriptionId": "6A48405D-2CBE-4C80-AFB4-266406E6E023",
     "resourceGroupName": "rgopenapi",
     "hcpOpenShiftClusterName": "Replace this value with a string matching RegExp ^[a-zA-Z0-9-]{3,24}$",
     "nodePoolName": "Replace this value with a string matching RegExp ^[a-zA-Z0-9-]{3,24}$"

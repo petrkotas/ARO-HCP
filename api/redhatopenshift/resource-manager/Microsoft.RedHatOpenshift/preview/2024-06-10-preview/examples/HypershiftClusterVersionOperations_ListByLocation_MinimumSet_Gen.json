@@ -3,8 +3,8 @@
   "operationId": "HypershiftClusterVersionOperations_ListByLocation",
   "parameters": {
     "api-version": "2024-06-10-preview",
-    "subscriptionId": "A0452127-E2C5-474B-9FB5-FA809B1022DC",
-    "location": "yislaspvyvsrpast"
+    "subscriptionId": "6A48405D-2CBE-4C80-AFB4-266406E6E023",
+    "location": "jhpjojmselbbefirhvabwgixfi"
   },
   "responses": {
     "200": {

@@ -1083,12 +1083,12 @@
         },
         "issuerUrl": {
           "type": "string",
-          "description": "URL for the OIDC provider",
+          "description": "URL for the OIDC provider to be used for authentication\nto authenticate against user Azure cloud account",
           "readOnly": true
         },
         "externalAuth": {
           "$ref": "#/definitions/ExternalAuthConfigProfile",
-          "description": "Configuration to override the openshift-oauth-apiserver inside cluster",
+          "description": "Configuration to override the openshift-oauth-apiserver inside cluster\nThis changes user login into the cluster to external provider",
           "x-ms-mutability": [
             "create"
           ]
@@ -1101,18 +1101,8 @@
           },
           "x-ms-identifiers": [],
           "x-ms-mutability": [
-            "update",
             "create"
           ]
-        },
-        "nodePools": {
-          "type": "array",
-          "description": "Worker node pools configuration, readonly.\nThe NodePool is always created during day-2 operations.\nUsing its separate endpoint.",
-          "items": {
-            "$ref": "#/definitions/NodePoolProfile"
-          },
-          "readOnly": true,
-          "x-ms-identifiers": []
         }
       },
       "required": [
@@ -1120,8 +1110,7 @@
         "console",
         "api",
         "platform",
-        "issuerUrl",
-        "nodePools"
+        "issuerUrl"
       ]
     },
     "ClusterSpecUpdate": {
@@ -1152,18 +1141,6 @@
         "proxy": {
           "$ref": "#/definitions/ProxyProfile",
           "description": "Openshift cluster proxy configuration",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "ingress": {
-          "type": "array",
-          "description": "Configures the cluster ingresses",
-          "items": {
-            "$ref": "#/definitions/IngressProfile"
-          },
-          "x-ms-identifiers": [],
           "x-ms-mutability": [
             "update",
             "create"
@@ -1355,12 +1332,14 @@
       "properties": {
         "kubeadminUsername": {
           "type": "string",
-          "description": "kubeadmin user name"
+          "description": "kubeadmin user name",
+          "readOnly": true
         },
         "kubeadminPassword": {
           "type": "string",
           "format": "password",
           "description": "kube admin password",
+          "readOnly": true,
           "x-ms-secret": true
         }
       },
@@ -1501,7 +1480,7 @@
         },
         "tuningConfigs": {
           "type": "array",
-          "description": "Tuning configs, TODO provide meaningful explanation",
+          "description": "Tuning configs, TODO provide meaningful explanation\nTuningConfig is a list of references to ConfigMaps containing serialized\nTuned resources to define the tuning configuration to be applied to\nnodes in the NodePool. The Tuned API is defined here:\n- https://github.com/openshift/cluster-node-tuning-operator/blob/2c76314fb3cc8f12aef4a0dcd67ddc3677d5b54f/pkg/apis/tuned/v1/tuned_types.go\n\nThe PerformanceProfile API is defined here:\n- https://github.com/openshift/cluster-node-tuning-operator/tree/b41042d42d4ba5bb2e99960248cf1d6ae4935018/pkg/apis/performanceprofile/v2\n\nEach ConfigMap must have a single key named \"tuned\" whose value is the\nJSON or YAML of a serialized Tuned or PerformanceProfile.",
           "items": {
             "type": "string"
           }
@@ -1887,7 +1866,7 @@
         },
         "tuningConfigs": {
           "type": "array",
-          "description": "Tuning configs, TODO provide meaningful explanation",
+          "description": "Tuning configs, TODO provide meaningful explanation\nTuningConfig is a list of references to ConfigMaps containing serialized\nTuned resources to define the tuning configuration to be applied to\nnodes in the NodePool. The Tuned API is defined here:\n- https://github.com/openshift/cluster-node-tuning-operator/blob/2c76314fb3cc8f12aef4a0dcd67ddc3677d5b54f/pkg/apis/tuned/v1/tuned_types.go\n\nThe PerformanceProfile API is defined here:\n- https://github.com/openshift/cluster-node-tuning-operator/tree/b41042d42d4ba5bb2e99960248cf1d6ae4935018/pkg/apis/performanceprofile/v2\n\nEach ConfigMap must have a single key named \"tuned\" whose value is the\nJSON or YAML of a serialized Tuned or PerformanceProfile.",
           "items": {
             "type": "string"
           }
@@ -1972,7 +1951,7 @@
           "type": "string",
           "description": "Resource group to put cluster resources"
         },
-        "subnetName": {
+        "subnetId": {
           "type": "string",
           "description": "ResourceId for the subnet used by the control plane"
         },
@@ -1992,7 +1971,7 @@
       },
       "required": [
         "managedResourceGroup",
-        "subnetName",
+        "subnetId",
         "preconfiguredNsgs"
       ]
     },

@@ -3,7 +3,7 @@
   "operationId": "HcpOpenShiftClusters_ListByResourceGroup",
   "parameters": {
     "api-version": "2024-06-10-preview",
-    "subscriptionId": "A0452127-E2C5-474B-9FB5-FA809B1022DC",
+    "subscriptionId": "6A48405D-2CBE-4C80-AFB4-266406E6E023",
     "resourceGroupName": "rgopenapi"
   },
   "responses": {
@@ -16,138 +16,109 @@
               "spec": {
                 "version": {
                   "availableUpgrades": [
-                    "bexbtbxudhuyoqdkkg"
+                    "xcgcqhpyyinlosffesv"
                   ]
                 },
                 "dns": {
-                  "baseDomain": "ayqsbhjuicmxwrsadrbtd"
+                  "baseDomain": "hxfgcfqegmdqx"
                 },
                 "network": {
                   "networkType": "OpenShiftSDN"
                 },
                 "console": {
-                  "url": "zokximmgdpjtxsfuruloysej"
+                  "url": "mtzigkrsgiyo"
                 },
                 "api": {
-                  "url": "ivywcqpbqysvfsvmuaejismylfbpiq",
-                  "ip": "nysnab",
+                  "url": "pwjqfbatpukpqvkmqxd",
+                  "ip": "k",
                   "visibility": "public"
                 },
                 "proxy": {
-                  "httpProxy": "b",
-                  "httpsProxy": "zuaktkzucfglxuncfzipyegxp",
-                  "noProxy": "yeedvu",
-                  "trustedCa": "myhjhsopoutsqydj"
+                  "httpProxy": "vvnnh",
+                  "httpsProxy": "hxus",
+                  "noProxy": "ayzziowzfvidxqjqfkdpnmcegbnj",
+                  "trustedCa": "gkhgck"
                 },
                 "platform": {
-                  "managedResourceGroup": "jdwbehxcdikiuhvgihuhjiky",
-                  "subnetName": "gfapbtgtgewdmlo",
+                  "managedResourceGroup": "uhizrsgkxancu",
+                  "subnetId": "tfl",
                   "outboundType": "loadBalancer",
                   "preconfiguredNsgs": true,
-                  "etcdEncryptionSetId": "rylyrhyshvlnf"
+                  "etcdEncryptionSetId": "bv"
                 },
-                "issuerUrl": "nvtcdtqgodtgppzxfqil",
+                "issuerUrl": "vvzyfoyhfwkdlzn",
                 "externalAuth": {
                   "externalAuths": [
                     {
                       "issuer": {
-                        "url": "ukodvjlterkdvv",
+                        "url": "tijlx",
                         "audiences": [
-                          "vxfvjofhyyfosydphzqfqpyirrqgz"
+                          "ukbgot"
                         ],
-                        "ca": "omgjtobymfiskoibhsvxwxzgqcctud"
+                        "ca": "erkprvxxjqleyrllduixsebhq"
                       },
                       "clients": [
                         {
                           "component": {
-                            "name": "esrhfawzxbnwzzxaxfggzon",
-                            "authClientNamespace": "crfyjryjpaxpdywt"
+                            "name": "gxgzgcunubakmquilegumjolccf",
+                            "authClientNamespace": "sm"
                           },
-                          "id": "wwbgendccg",
+                          "id": "vr",
                           "extraScopes": [
-                            "w"
+                            "nmclgwzvgsmyjfnlqzxhskv"
                           ]
                         }
                       ],
                       "claim": {
                         "mappings": {
                           "username": {
-                            "claim": "vumprtgrpludykizwofknrvv",
-                            "prefix": "vjhgkc",
-                            "prefixPolicy": "hayqcfaascgpnbzwvtypxuor"
+                            "claim": "ljjfttgacahcmngxndvywwp",
+                            "prefix": "qofnbpwbxzbbaejpgqukvqqnltcyn",
+                            "prefixPolicy": "rwqp"
                           },
                           "groups": {
-                            "claim": "vumprtgrpludykizwofknrvv",
-                            "prefix": "vjhgkc",
-                            "prefixPolicy": "hayqcfaascgpnbzwvtypxuor"
+                            "claim": "ljjfttgacahcmngxndvywwp",
+                            "prefix": "qofnbpwbxzbbaejpgqukvqqnltcyn",
+                            "prefixPolicy": "rwqp"
                           }
                         },
                         "validationRules": [
                           {
-                            "claim": "ecwaxqioxuryvasagoaj",
-                            "requiredValue": "hgwzcodhbryb"
+                            "claim": "ubveiuvhoexhqlgpcoaqdszmli",
+                            "requiredValue": "wvplci"
                           }
                         ]
                       }
                     }
                   ]
-                },
-                "nodePools": [
-                  {
-                    "name": "jbmgyzbxseqpeanrxjftryzqqnpzay",
-                    "version": "eqqc",
-                    "labels": [
-                      "qgqhcmxbhkpffkytbnvd"
-                    ],
-                    "taints": [
-                      "yseunftinjkpe"
-                    ],
-                    "diskSize": 29,
-                    "ephemeralOsDisk": true,
-                    "replicas": 29,
-                    "subnetId": "sslpavxmjnklzdoabpoj",
-                    "encryptionAtHost": true,
-                    "autoRepair": true,
-                    "discEncryptionSetId": "cr",
-                    "tuningConfigs": [
-                      "pnbyeueebnkix"
-                    ],
-                    "availabilityZone": "ks",
-                    "diskStorageAccountType": "xi",
-                    "vmSize": "ffrbon",
-                    "autoscaling": {
-                      "minReplicas": 10,
-                      "maxReplicas": 27
-                    }
-                  }
-                ]
+                }
               }
             },
             "identity": {
-              "principalId": "iuyuycdkmsmhzifbfftkj",
-              "tenantId": "lm",
+              "principalId": "dfnuq",
+              "tenantId": "zyjk",
               "type": "None",
               "userAssignedIdentities": {
-                "key227": {
-                  "principalId": "hjytpgegeuwumn",
-                  "clientId": "lnugnqihakhivdwyfti"
+                "key3539": {
+                  "principalId": "irfwab",
+                  "clientId": "pinwvigtjnlspg"
                 }
               }
             },
             "tags": {
-              "key5460": "r"
+              "key7465": "mw"
             },
-            "location": "lmuqakusrqapmlibstbxqlcikycy",
-            "id": "hjup",
-            "name": "dtru",
-            "type": "tgcr",
+            "location": "lcdynihviwwe",
+            "id": "gjmrissytzczlmvkmykunz",
+            "name": "osrld",
+            "type": "txfhmumtvytrgmsnjjeshtgifpkym",
             "systemData": {
-              "createdBy": "xhpexhblvbxohmgl",
+              "createdBy": "cdwcvknu",
               "createdByType": "User",
-              "createdAt": "2024-03-13T07:43:50.074Z",
-              "lastModifiedBy": "ejxjgkqrwrxnootn",
+              "createdAt": "2024-03-13T17:11:19.485Z",
+              "lastModifiedBy": "iwxqzej",
               "lastModifiedByType": "User",
-              "lastModifiedAt": "2024-03-13T07:43:50.075Z"
+              "lastModifiedAt": "2024-03-13T17:11:19.485Z"
             }
           }
         ],
