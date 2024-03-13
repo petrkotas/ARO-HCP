@@ -72,19 +72,23 @@ model ClusterSpec {
   @visibility("create")
   network?: NetworkProfile;
 
-  /** Configures the cluster web console */
+  /** Shows the cluster web console information */
   @visibility("read")
   console: ConsoleProfile;
 
-  /** Configures the cluster API server profile */
+  /** Shows the cluster API server profile */
   @visibility("read")
   api: ApiProfile;
 
-  /** Enable FIPS mode for the cluster */
+  /** Enable FIPS mode for the cluster
+   * When set to true, `etcdEncryption` must be set to true
+  */
   @visibility("create")
   fips?: boolean = false;
 
-  /** Enables ETCD encryption, set during creation */
+  /** Enables customer ETCD encryption, set during creation
+   * When set to true, `platform.etcdEncryptionSetId` must be set
+  */
   @visibility("create")
   etcdEncryption?: boolean = false;
 
@@ -96,7 +100,7 @@ model ClusterSpec {
   @visibility("create", "update")
   proxy?: ProxyProfile;
 
-  /** Azure specific configuration */
+  /** Azure platform configuration */
   @visibility("create")
   platform: PlatformProfile;
 
@@ -158,17 +162,23 @@ model DnsProfile {
 model NetworkProfile {
   /** The main controller responsible for rendering the core networking components */
   @visibility("create")
-  networkType?: NetworkType = OVNKubernetes;
+  networkType?: NetworkType = NetworkType.OVNKubernetes;
 
-  /** The CIDR of the pod IP addresses, for example 10.128.0.0/14 */
+  /** The CIDR of the pod IP addresses
+   * example: 10.128.0.0/14
+   */
   @visibility("create")
   podCidr: string;
 
-  /** The CIDR block for assigned service IPs, for example 172.30.0.0/16 */
+  /** The CIDR block for assigned service IPs,
+   * example: 172.30.0.0/16
+   */
   @visibility("create")
   serviceCidr: string;
 
-  /** from which to assign machine IP addresses, for example 10.0.0.0/16 */
+  /** from which to assign machine IP addresses,
+   * example: 10.0.0.0/16
+   */
   @visibility("create")
   machineCidr: string;
 
@@ -222,7 +232,9 @@ enum Visibility {
   private: "private",
 }
 
-/** OpenShift cluster proxy configuration */
+/** OpenShift cluster proxy configuration
+ * - https://docs.openshift.com/container-platform/4.12/networking/enable-cluster-wide-proxy.html
+*/
 model ProxyProfile {
   /** http proxy config */
   httpProxy?: string;
@@ -251,8 +263,11 @@ model PlatformProfile {
   /** Specifies whether subnets are pre-attached with an NSG */
   preconfiguredNsgs: boolean;
 
-  /** Allow customer to specify custom encryption keys for etcd. */
-  etcdEncryption?: EtcdEncryptionProfile;
+  /** The id of the disk encryption set to be used for etcd.
+   * Configure this when `etcdEncryption` is set to true
+   * Is used the https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview
+  */
+  etcdEncryptionSetId?: string;
 }
 
 /** The outbound routing strategy used to provide your cluster egress to the internet. */
@@ -397,7 +412,9 @@ model IngressProfile {
   @visibility("read")
   url: string;
 
-  /** The visibility of the ingress */
+  /** The visibility of the ingress
+   * determines if the ingress is visible from the internet
+  */
   @visibility("create")
   visibility: Visibility;
 }
@@ -465,11 +482,16 @@ model NodePoolProfile {
   /** Tuning configs, TODO provide meaningful explanation */
   tuningConfigs: string[];
 
-  /** The availability zone for the node pool */
+  /** The availability zone for the node pool.
+   * Please read the documentation to see which regions support availability zones
+   * - https://learn.microsoft.com/en-us/azure/availability-zones/az-overview
+  */
   availabilityZone: string;
 
-  /** The type of the disc storage account */
-  discStorageAccountType: string;
+  /** The type of the disc storage account
+   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types
+  */
+  diskStorageAccountType: string;
 
   /** The VM size according to the documentation:
    * - https://learn.microsoft.com/en-us/azure/virtual-machines/sizes */

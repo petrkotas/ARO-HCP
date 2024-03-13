@@ -1033,17 +1033,17 @@
         },
         "console": {
           "$ref": "#/definitions/ConsoleProfile",
-          "description": "Configures the cluster web console",
+          "description": "Shows the cluster web console information",
           "readOnly": true
         },
         "api": {
           "$ref": "#/definitions/ApiProfile",
-          "description": "Configures the cluster API server profile",
+          "description": "Shows the cluster API server profile",
           "readOnly": true
         },
         "fips": {
           "type": "boolean",
-          "description": "Enable FIPS mode for the cluster",
+          "description": "Enable FIPS mode for the cluster\nWhen set to true, `etcdEncryption` must be set to true",
           "default": false,
           "x-ms-mutability": [
             "create"
@@ -1051,7 +1051,7 @@
         },
         "etcdEncryption": {
           "type": "boolean",
-          "description": "Enables ETCD encryption, set during creation",
+          "description": "Enables customer ETCD encryption, set during creation\nWhen set to true, `platform.etcdEncryptionSetId` must be set",
           "default": false,
           "x-ms-mutability": [
             "create"
@@ -1074,17 +1074,9 @@
             "create"
           ]
         },
-        "additionalTrustBundle": {
-          "type": "string",
-          "description": "Additional trust bundle for the cluster",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
         "platform": {
           "$ref": "#/definitions/PlatformProfile",
-          "description": "Azure specific configuration",
+          "description": "Azure platform configuration",
           "x-ms-mutability": [
             "create"
           ]
@@ -1095,12 +1087,8 @@
           "readOnly": true
         },
         "externalAuth": {
-          "type": "array",
-          "description": "Configuration to override the OpenShift auth server inside cluster",
-          "items": {
-            "$ref": "#/definitions/ExternalAuthProfile"
-          },
-          "x-ms-identifiers": [],
+          "$ref": "#/definitions/ExternalAuthConfigProfile",
+          "description": "Configuration to override the openshift-oauth-apiserver inside cluster",
           "x-ms-mutability": [
             "create"
           ]
@@ -1162,16 +1150,8 @@
           ]
         },
         "proxy": {
-          "$ref": "#/definitions/ProxyProfileUpdate",
+          "$ref": "#/definitions/ProxyProfile",
           "description": "Openshift cluster proxy configuration",
-          "x-ms-mutability": [
-            "update",
-            "create"
-          ]
-        },
-        "additionalTrustBundle": {
-          "type": "string",
-          "description": "Additional trust bundle for the cluster",
           "x-ms-mutability": [
             "update",
             "create"
@@ -1315,6 +1295,32 @@
         "id",
         "secret",
         "extraScopes"
+      ]
+    },
+    "ExternalAuthConfigProfile": {
+      "type": "object",
+      "description": "External authentication configuration profile",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "This can be set during cluster creation only to ensure there is no openshift-oauth-apiserver in cluster",
+          "default": false,
+          "x-ms-mutability": [
+            "create"
+          ]
+        },
+        "externalAuths": {
+          "type": "array",
+          "description": "This can only be set as a day-2 resource on a separate endpoint to provide a self-managed auth service",
+          "items": {
+            "$ref": "#/definitions/ExternalAuthProfile"
+          },
+          "readOnly": true,
+          "x-ms-identifiers": []
+        }
+      },
+      "required": [
+        "externalAuths"
       ]
     },
     "ExternalAuthProfile": {
@@ -1502,11 +1508,11 @@
         },
         "availabilityZone": {
           "type": "string",
-          "description": "The availability zone for the node pool"
+          "description": "The availability zone for the node pool.\nPlease read the documentation to see which regions support availability zones\n- https://learn.microsoft.com/en-us/azure/availability-zones/az-overview"
         },
-        "discStorageAccountType": {
+        "diskStorageAccountType": {
           "type": "string",
-          "description": "The type of the disc storage account"
+          "description": "The type of the disc storage account\n- https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types"
         },
         "vmSize": {
           "type": "string",
@@ -1696,7 +1702,7 @@
         },
         "visibility": {
           "$ref": "#/definitions/Visibility",
-          "description": "The visibility of the ingress",
+          "description": "The visibility of the ingress\ndetermines if the ingress is visible from the internet",
           "x-ms-mutability": [
             "create"
           ]
@@ -1715,27 +1721,28 @@
         "networkType": {
           "$ref": "#/definitions/NetworkType",
           "description": "The main controller responsible for rendering the core networking components",
+          "default": "OVNKubernetes",
           "x-ms-mutability": [
             "create"
           ]
         },
         "podCidr": {
           "type": "string",
-          "description": "The CIDR of the pod IP addresses, for example 10.128.0.0/14",
+          "description": "The CIDR of the pod IP addresses\nexample: 10.128.0.0/14",
           "x-ms-mutability": [
             "create"
           ]
         },
         "serviceCidr": {
           "type": "string",
-          "description": "The CIDR block for assigned service IPs, for example 172.30.0.0/16",
+          "description": "The CIDR block for assigned service IPs,\nexample: 172.30.0.0/16",
           "x-ms-mutability": [
             "create"
           ]
         },
         "machineCidr": {
           "type": "string",
-          "description": "from which to assign machine IP addresses, for example 10.0.0.0/16",
+          "description": "from which to assign machine IP addresses,\nexample: 10.0.0.0/16",
           "x-ms-mutability": [
             "create"
           ]
@@ -1751,7 +1758,6 @@
         }
       },
       "required": [
-        "networkType",
         "podCidr",
         "serviceCidr",
         "machineCidr"
@@ -1770,17 +1776,17 @@
         "modelAsString": true,
         "values": [
           {
-            "name": "sdn",
+            "name": "OpenShiftSDN",
             "value": "OpenShiftSDN",
             "description": "The SDN network plugin for the OpenShift cluster\n- https://docs.openshift.com/container-platform/4.12/networking/openshift_sdn/about-openshift-sdn.html"
           },
           {
-            "name": "ovn",
+            "name": "OVNKubernetes",
             "value": "OVNKubernetes",
             "description": "THE OVN network plugin for the OpenShift cluster\n- https://docs.openshift.com/container-platform/4.12/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html"
           },
           {
-            "name": "other",
+            "name": "Other",
             "value": "Other",
             "description": "Other network plugins"
           }
@@ -1888,11 +1894,11 @@
         },
         "availabilityZone": {
           "type": "string",
-          "description": "The availability zone for the node pool"
+          "description": "The availability zone for the node pool.\nPlease read the documentation to see which regions support availability zones\n- https://learn.microsoft.com/en-us/azure/availability-zones/az-overview"
         },
-        "discStorageAccountType": {
+        "diskStorageAccountType": {
           "type": "string",
-          "description": "The type of the disc storage account"
+          "description": "The type of the disc storage account\n- https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types"
         },
         "vmSize": {
           "type": "string",
@@ -1917,7 +1923,7 @@
         "discEncryptionSetId",
         "tuningConfigs",
         "availabilityZone",
-        "discStorageAccountType",
+        "diskStorageAccountType",
         "vmSize",
         "autoscaling"
       ]
@@ -1962,37 +1968,13 @@
       "type": "object",
       "description": "Azure specific configuration",
       "properties": {
-        "location": {
-          "type": "string",
-          "description": "The Azure region for the cluster"
-        },
         "managedResourceGroup": {
           "type": "string",
           "description": "Resource group to put cluster resources"
         },
-        "vnetName": {
-          "type": "string",
-          "description": "vNet name that should be used for the cluster"
-        },
-        "vnetId": {
-          "type": "string",
-          "description": "ResourceId for the subnet used by the control plane"
-        },
         "subnetName": {
           "type": "string",
           "description": "ResourceId for the subnet used by the control plane"
-        },
-        "subscriptionId": {
-          "type": "string",
-          "description": "Subscription ID"
-        },
-        "machineIdentityId": {
-          "type": "string",
-          "description": "The identity id of the machine"
-        },
-        "securityGroupName": {
-          "type": "string",
-          "description": "The identity id of the control plane"
         },
         "outboundType": {
           "$ref": "#/definitions/OutboundType",
@@ -2003,20 +1985,14 @@
           "type": "boolean",
           "description": "Specifies whether subnets are pre-attached with an NSG"
         },
-        "etcdEncryption": {
-          "$ref": "#/definitions/EtcdEncryptionProfile",
-          "description": "Allow customer to specify custom encryption keys for etcd."
+        "etcdEncryptionSetId": {
+          "type": "string",
+          "description": "The id of the disk encryption set to be used for etcd.\nConfigure this when `etcdEncryption` is set to true\nIs used the https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview"
         }
       },
       "required": [
-        "location",
         "managedResourceGroup",
-        "vnetName",
-        "vnetId",
         "subnetName",
-        "subscriptionId",
-        "machineIdentityId",
-        "securityGroupName",
         "preconfiguredNsgs"
       ]
     },
@@ -2053,35 +2029,7 @@
     },
     "ProxyProfile": {
       "type": "object",
-      "description": "OpenShift cluster proxy configuration",
-      "properties": {
-        "httpProxy": {
-          "type": "string",
-          "description": "http proxy config"
-        },
-        "httpsProxy": {
-          "type": "string",
-          "description": "https proxy config"
-        },
-        "noProxy": {
-          "type": "string",
-          "description": "no proxy config"
-        },
-        "trustedCa": {
-          "type": "string",
-          "description": "The trusted CA for the proxy"
-        }
-      },
-      "required": [
-        "httpProxy",
-        "httpsProxy",
-        "noProxy",
-        "trustedCa"
-      ]
-    },
-    "ProxyProfileUpdate": {
-      "type": "object",
-      "description": "OpenShift cluster proxy configuration",
+      "description": "OpenShift cluster proxy configuration\n- https://docs.openshift.com/container-platform/4.12/networking/enable-cluster-wide-proxy.html",
       "properties": {
         "httpProxy": {
           "type": "string",

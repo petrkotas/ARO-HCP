@@ -1,0 +1,4 @@
+{
+  message: `fatal error: ENOENT: no such file or directory, open '/workspaces/GH_ARO-HCP/api/redhatopenshift/Hypershift/redhatopenshift/resource-manager/Microsoft.RedHatOpenshift/preview/2024-06-10-preview/openapi.json', {"errno":-2,"code":"ENOENT","syscall":"open","path":"/workspaces/GH_ARO-HCP/api/redhatopenshift/Hypershift/redhatopenshift/resource-manager/Microsoft.RedHatOpenshift/preview/2024-06-10-preview/openapi.json"}`,
+  level: 'error'
+}
