@@ -422,52 +422,47 @@ model NodePoolProperties {
   @visibility("read")
   provisioningState?: ResourceProvisioningState;
 
-  /** Node pool profile */
-  profile: NodePoolProfile;
+  /** The node pool resource specification */
+  spec: NodePoolSpec;
 }
 
 /** Worker node pool profile */
-model NodePoolProfile {
+model NodePoolSpec {
   /** The name of the worker pool */
+  @visibility("create")
   name: string;
 
   /** OpenShift version for the nodepool */
-  version: string;
+  @visibility("create", "update")
+  version: VersionProfile;
 
-  /** Labels for the nodes */
-  labels: string[];
-
-  /** Taints for the nodes */
-  taints: string[];
-
-  /** The OS disk size in GB */
-  diskSize: int32;
-
-  /** IS the disk ephemeral */
-  ephemeralOsDisk: boolean;
+  /** Azure node pool platform configuration */
+  @visibility("create")
+  platform: NodePoolPlatformProfile;
 
   /** The number of worker nodes, it cannot be used together with autoscaling */
-  replicas: int32;
-
-  /** The Azure resourceId for the subnet used by the workers */
-  subnetId: string;
-
-  /** Azure; Whether the worker machines should be encrypted at host */
-  encryptionAtHost: boolean;
+  @visibility("create", "update")
+  replicas?: int32;
 
   /** Autorepair */
-  autoRepair: boolean;
+  @visibility("create")
+  autoRepair?: boolean = false;
 
-  /** Disk Encryption Set ID that will be used for ecnryption the Nodes disks
-   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview
-   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption
-   */
-  discEncryptionSetId: string;
+  /** Representation of a autoscaling in a node pool. */
+  autoScaling?: NodePoolAutoScaling;
+
+  /** Labels for the nodes */
+  @visibility("create", "update")
+  labels?: string[];
+
+  /** Taints for the nodes */
+  @visibility("create", "update")
+  taints?: string[];
 
   /** Tuning configs, TODO provide meaningful explanation
    * TuningConfig is a list of references to ConfigMaps containing serialized
-	 * Tuned resources to define the tuning configuration to be applied to
-	 * nodes in the NodePool. The Tuned API is defined here:
+   * Tuned resources to define the tuning configuration to be applied to
+   * nodes in the NodePool. The Tuned API is defined here:
    * - https://github.com/openshift/cluster-node-tuning-operator/blob/2c76314fb3cc8f12aef4a0dcd67ddc3677d5b54f/pkg/apis/tuned/v1/tuned_types.go
    *
    * The PerformanceProfile API is defined here:
@@ -476,34 +471,52 @@ model NodePoolProfile {
    * Each ConfigMap must have a single key named "tuned" whose value is the
    * JSON or YAML of a serialized Tuned or PerformanceProfile.
   */
-  tuningConfigs: string[];
+  tuningConfigs?: string[];
+}
 
-  /** The availability zone for the node pool.
-   * Please read the documentation to see which regions support availability zones
-   * - https://learn.microsoft.com/en-us/azure/availability-zones/az-overview
-  */
-  availabilityZone: string;
-
-  /** The type of the disc storage account
-   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types
-  */
-  diskStorageAccountType: string;
+/** Azure node pool platform configuration */
+model NodePoolPlatformProfile {
+  /** The resourceId for the subnet used by the workers */
+  subnetId: string;
 
   /** The VM size according to the documentation:
    * - https://learn.microsoft.com/en-us/azure/virtual-machines/sizes */
   vmSize: string;
 
-  /** Representation of a autoscaling in a node pool. */
-  autoscaling: NodePoolAutoscaling;
+  /** The OS disk size in GB */
+  diskSizeGB?: int32;
+
+  /** The type of the disc storage account
+   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types
+  */
+  diskStorageAccountType?: string;
+
+  /** The availability zone for the node pool.
+   * Please read the documentation to see which regions support availability zones
+   * - https://learn.microsoft.com/en-us/azure/availability-zones/az-overview
+  */
+  availabilityZone?: string;
+
+  /** Whether the worker machines should be encrypted at host */
+  encryptionAtHost?: boolean;
+
+  /** Disk Encryption Set ID that will be used for ecnryption the Nodes disks
+   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview
+   * - https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption
+   */
+  discEncryptionSetId?: string;
+
+  /** Is the disk ephemeral */
+  ephemeralOsDisk?: boolean;
 }
 
 /** Node pool autoscaling */
-model NodePoolAutoscaling {
+model NodePoolAutoScaling {
   /** The minimum number of nodes in the node pool */
-  minReplicas: int32;
+  min: int32;
 
   /** The maximum number of nodes in the node pool */
-  maxReplicas: int32;
+  max: int32;
 }
 
 /*
