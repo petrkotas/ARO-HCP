@@ -273,18 +273,6 @@ enum OutboundType {
   loadBalancer: "loadBalancer",
 }
 
-/** Etcd encryption profile sets the configuration needed for
- * customer brought keys to encrypt the etcd.
- * This is an optional field, if omitted the default encryption key is used.
- * TODO: decide how this is going to be implemented
-*/
-model EtcdEncryptionProfile {
-  /** The id of the disk encryption set to be used for etcd
-   * Is relies on https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview
-  */
-  discEncryptionSetId: string;
-}
-
 /*
 * =======================================
 *   End HyperShift cluster core resources
